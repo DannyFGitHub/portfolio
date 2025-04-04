@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect, useRef } from "react";
+import React, { Suspense, useEffect, useRef, useState } from "react";
 import { Canvas, useFrame, useLoader, useThree } from "@react-three/fiber";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import {
@@ -10,12 +10,133 @@ import {
   Clouds,
   Cloud,
   Center,
+  Html,
+  OrbitControls,
+  Stats,
 } from "@react-three/drei";
 import { Color } from "three/webgpu";
 import cemshirtUrl from "../../../assets/models/cemshirt.glb";
 import appleshirtUrl from "../../../assets/models/appleshirt.glb";
 import iptechshirtUrl from "../../../assets/models/iptechshirt.glb";
 import styled from "styled-components";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+
+import { Group } from "three";
+
+export function MousePerspectiveRig(props) {
+  const ref = useRef<Group>(null!);
+  let scroll = useScroll();
+  useFrame((state, delta) => {
+    if (props?.disableScroll !== true) {
+      ref.current.rotation.y = -scroll.offset * (Math.PI * 1.32); // Rotate contents
+    }
+    state.events.update(); // Raycasts every frame rather than on pointer-move
+  });
+  return <group ref={ref} {...props} />;
+}
+
+function Shirt(props) {
+  const ref = useRef();
+  const data = useScroll();
+
+  const [pos, setPos] = useState();
+
+  useFrame(() => {
+    // data.offset = current scroll position, between 0 and 1, dampened
+    // data.delta = current delta, between 0 and 1, dampened
+
+    // Will be 0 when the scrollbar is at the starting position,
+    // then increase to 1 until 1 / 3 of the scroll distance is reached
+    const a = data.range(0, 1 / 3);
+    // Will start increasing when 1 / 3 of the scroll distance is reached,
+    // and reach 1 when it reaches 2 / 3rds.
+    const b = data.range(1 / 3, 1 / 3);
+    // Same as above but with a margin of 0.1 on both ends
+    const c = data.range(1 / 3, 1 / 3, 0.1);
+    // Will move between 0-1-0 for the selected range
+    const d = data.curve(1 / 3, 1 / 3);
+    // Same as above, but with a margin of 0.1 on both ends
+    const e = data.curve(1 / 3, 1 / 3, 0.1);
+    // Returns true if the offset is in range and false if it isn't
+    const f = data.visible(2 / 3, 1 / 3);
+    // The visible function can also receive a margin
+    const g = data.visible(2 / 3, 1 / 3, 0.1);
+
+    console.log(a, b, c, d, e, f, g);
+  });
+  return <primitive ref={ref} {...props} />;
+}
+
+function Page({
+  pageNumber,
+  businessName,
+  businessDescription,
+  jobDescription,
+  jobRoles,
+}) {
+  return (
+    <Box
+      style={{
+        position: "relative",
+        color: "white",
+        height: "100vh",
+        width: "100%",
+        top: 0 * pageNumber + "vh",
+      }}
+      p={{ sm: 0, md: 2, lg: 4 }}
+      m={1}
+    >
+      <Box
+        p={{ sm: 0, md: 2, lg: 4 }}
+        m={1}
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        flexDirection="column"
+        height="100%"
+        width="100%"
+        style={{
+          filter: "drop-shadow(0px 0px 20px white)",
+        }}
+      >
+        <Box
+          p={{ sm: 0, md: 2, lg: 4 }}
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          flexDirection="column"
+        >
+          <Typography flex="1" variant="h1">
+            {businessName}
+          </Typography>
+          <Box flex="2">{businessDescription}</Box>
+        </Box>
+        <hr style={{ width: "100%" }} />
+        <Box
+          m={1}
+          p={{ sm: 0, md: 2, lg: 4 }}
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          flexDirection="column"
+        >
+          {jobDescription}
+        </Box>
+        <Box
+          m={1}
+          p={{ sm: 0, md: 2, lg: 4 }}
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          flexDirection="column"
+        >
+          {jobRoles}
+        </Box>
+      </Box>
+    </Box>
+  );
+}
 
 const Scene = () => {
   const cemshirtRef = useRef();
@@ -24,100 +145,35 @@ const Scene = () => {
 
   const shirtsGroupRef = useRef();
 
-  const { scene, MeshBasicMaterial } = useThree();
-  const scroll = useScroll();
-
-  // const { position, rotation, cameraPositionIndex, usePositionSlider, useScrollBarPosition } = useControls({
-  //   useScrollBarPosition: { value: true },
-  //   usePositionSlider: { value: true },
-  //   cameraPositionIndex: { value: 0, min: 0, max: 2, step: 1 },
-  //   position: { value: [-0.8, 0.1, 2.5], step: 0.01 },
-  //   rotation: { value: [0, -1, 0], step: 0.01 },
-  // });
-
-  const [useScrollBarPosition] = React.useState(true);
-  const [usePositionSlider] = React.useState(true);
-  const [cameraPositionIndex] = React.useState(0);
-  const [position] = React.useState([-0.8, 0.1, 2.5]);
-  const [rotation] = React.useState([0, -1, 0]);
+  const { scene, MeshBasicMaterial, viewport } = useThree();
 
   const cemshirt = useLoader(GLTFLoader, cemshirtUrl);
   const appleshirt = useLoader(GLTFLoader, appleshirtUrl);
   const iptechshirt = useLoader(GLTFLoader, iptechshirtUrl);
 
-  const groupLocations = [
-    { position: [-1.5, 0, 2.5], rotation: [0, 1, 0] },
-    { position: [0.19, 0, 3.58], rotation: [0, 1, 0] },
-    { position: [1.9, 0, 4.65], rotation: [0, 1, 0] },
+  const shirts = [
+    { ref: iptechshirtRef, model: iptechshirt },
+    { ref: cemshirtRef, model: cemshirt },
+    { ref: appleshirtRef, model: appleshirt },
   ];
+  const [shirtWithLoc] = useState(
+    shirts.map((item, index: number): { ref; model; loc } => {
+      const radius = 1;
+      return {
+        ...item,
+        loc: [
+          Math.sin((index / shirts.length) * Math.PI * 2) * radius,
+          -0.3,
+          Math.cos((index / shirts.length) * Math.PI * 2) * radius,
+        ],
+      };
+    })
+  );
 
   useFrame(() => {
     cemshirtRef.current.rotation.y += 0.005;
     appleshirtRef.current.rotation.y += 0.005;
     iptechshirtRef.current.rotation.y += 0.005;
-
-    if (!useScrollBarPosition) {
-      if (usePositionSlider) {
-        shirtsGroupRef.current.position.set(
-          groupLocations[cameraPositionIndex].position[0],
-          groupLocations[cameraPositionIndex].position[1],
-          groupLocations[cameraPositionIndex].position[2]
-        );
-        shirtsGroupRef.current.rotation.set(
-          groupLocations[cameraPositionIndex].rotation[0],
-          groupLocations[cameraPositionIndex].rotation[1],
-          groupLocations[cameraPositionIndex].rotation[2]
-        );
-      } else {
-        shirtsGroupRef.current.position.set(
-          position[0],
-          position[1],
-          position[2]
-        );
-        shirtsGroupRef.current.rotation.set(
-          rotation[0],
-          rotation[1],
-          rotation[2]
-        );
-      }
-    }
-
-    if (useScrollBarPosition) {
-      if (scroll.offset > 0 && scroll.offset < 0.33) {
-        shirtsGroupRef.current.position.set(
-          groupLocations[0].position[0],
-          groupLocations[0].position[1],
-          groupLocations[0].position[2]
-        );
-        shirtsGroupRef.current.rotation.set(
-          groupLocations[0].rotation[0],
-          groupLocations[0].rotation[1],
-          groupLocations[0].rotation[2]
-        );
-      } else if (scroll.offset > 0.33 && scroll.offset < 0.66) {
-        shirtsGroupRef.current.position.set(
-          groupLocations[1].position[0],
-          groupLocations[1].position[1],
-          groupLocations[1].position[2]
-        );
-        shirtsGroupRef.current.rotation.set(
-          groupLocations[1].rotation[0],
-          groupLocations[1].rotation[1],
-          groupLocations[1].rotation[2]
-        );
-      } else if (scroll.offset > 0.66 && scroll.offset < 1) {
-        shirtsGroupRef.current.position.set(
-          groupLocations[2].position[0],
-          groupLocations[2].position[1],
-          groupLocations[2].position[2]
-        );
-        shirtsGroupRef.current.rotation.set(
-          groupLocations[2].rotation[0],
-          groupLocations[2].rotation[1],
-          groupLocations[2].rotation[2]
-        );
-      }
-    }
   });
 
   useEffect(() => {
@@ -126,76 +182,52 @@ const Scene = () => {
 
   return (
     <>
-      {/* <directionalLight position={[-1.3, 6.0, 4.4]} castShadow intensity={Math.PI * 1} /> */}
-
-      <Center>
-        <group ref={shirtsGroupRef} scale={[1, 1, 1]} rotation={[0, 0, 0]}>
-          <primitive
-            ref={iptechshirtRef}
-            object={iptechshirt.scene}
-            position={[0, -0.3, -2]}
-            children-0-castShadow
-            rotation={[0, -0.5, 0]}
-          />
-          <primitive
-            ref={appleshirtRef}
-            object={appleshirt.scene}
-            position={[0, -0.3, 0]}
-            children-0-castShadow
-            rotation={[0, -0.5, 0]}
-          />
-          <primitive
-            ref={cemshirtRef}
-            object={cemshirt.scene}
-            position={[0, -0.3, 2]}
-            children-0-castShadow
-            rotation={[0, -0.5, 0]}
-          />
-        </group>
+      <group position={[0, 0, -5]}>
         <Clouds material={MeshBasicMaterial}>
           <Cloud seed={1} scale={1} volume={5} color="hotpink" fade={200} />
         </Clouds>
-      </Center>
-      <Scroll html>
-        <div style={{ fontSize: "1vw" }}>
-          {/** Put a div next to the bounding box of the shirt that says the name of the shirt */}
-          <div
-            style={
-              // center the div in the middle of the screen and split it in half
-              {
-                position: "absolute",
-                top: "50vh",
-                left: "30vw",
-                transform: "translate(-50%, -50%)",
-                color: "white",
-              }
-            }
-          >
-            <div
-              style={{
-                //divide this into two divs side by side
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                width: "30vw",
-                height: "50vh",
-                filter: "drop-shadow(0px 0px 20px white)",
-              }}
+      </group>
+      <ScrollControls pages={3} damping={0.25}>
+        <Scroll>
+          <MousePerspectiveRig>
+            <group position={[0, 0, 0]} rotation={[0, Math.PI * 0.2, 0]}>
+              {shirtWithLoc.map((shirt, index) => {
+                return (
+                  <Shirt
+                    ref={shirt.ref}
+                    object={shirt.model.scene}
+                    position={shirt.loc}
+                    castShadow
+                    rotation={[0, -0.5, 0]}
+                  />
+                );
+              })}
+            </group>
+          </MousePerspectiveRig>
+        </Scroll>
+
+        <Scroll html>
+          <Box display="flex">
+            <Box
+              flex={1}
+              display="flex"
+              justifyContent="center"
+              flexDirection="column"
             >
-              <div>
-                <div style={{ textAlign: "start" }}>
-                  <h1 style={{ color: "white" }}>CEM</h1>
-                </div>
-                <div>
-                  As a not-for-profit, non-denominational, Christian
-                  organisation CEM is involved in various aspects of Christian
-                  Education, including the delivery of school support services,
-                  developing curriculum, operating early learning centres and
-                  helping home schoolers. The organisation manages five distinct
-                  brands.
-                </div>
-                <hr />
-                <div>
+              <Page
+                pageNumber={1}
+                businessName={"CEM"}
+                businessDescription={
+                  <>
+                    As a not-for-profit, non-denominational, Christian
+                    organisation CEM is involved in various aspects of Christian
+                    Education, including the delivery of school support
+                    services, developing curriculum, operating early learning
+                    centres and helping home schoolers. The organisation manages
+                    five distinct brands.
+                  </>
+                }
+                jobDescription={
                   <ul>
                     <li>
                       Designed and developed multiple web applications and
@@ -213,95 +245,59 @@ const Scene = () => {
                       deployment
                     </li>
                   </ul>
-                </div>
-                <div>
-                  Roles:
-                  <div>Software Engineer</div>
-                  <div>IT Officer - Network and System Administrator</div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div
-            style={{
-              position: "absolute",
-              color: "white",
-              top: "150vh",
-              left: "30vw",
-              transform: "translate(-50%, -50%)",
-              filter: "drop-shadow(0px 0px 20px white)",
-            }}
-          >
-            <div
-              style={{
-                //divide this into two divs side by side
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                width: "30vw",
-                height: "50vh",
-              }}
-            >
-              <div>
-                <div style={{ textAlign: "center", margin: "1rem" }}>
-                  <h1 style={{ color: "white" }}>Apple Inc.</h1>
-                </div>
-                <div>
-                  Apple Inc. is an American multinational corporation and
-                  technology company headquartered and incorporated in
-                  Cupertino, California, in Silicon Valley. It is best known for
-                  its consumer electronics, software, and services. Founded in
-                  1976 as Apple Computer Company by Steve Jobs, Steve Wozniak
-                  and Ronald Wayne, the company was incorporated by Jobs and
-                  Wozniak as Apple Computer, Inc. the following year. It was
-                  renamed Apple Inc. in 2007 as the company had expanded its
-                  focus from computers to consumer electronics. Apple is the
-                  largest technology company by revenue, with US$391.04 billion
-                  in 2024.
-                </div>
-                <hr />
-                <div>
-                  Apple Corporate Roles:
-                  <div>Apple Advisor Coach</div>
-                  <div>Mac+ Senior Advisor</div>
-                  <div>iOS Senior Advisor</div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div
-            style={{
-              position: "absolute",
-              color: "white",
-              transform: "translate(-50%, -50%)",
-              top: "250vh",
-              left: "30vw",
-              filter: "drop-shadow(0px 0px 20px white)",
-            }}
-          >
-            <div
-              style={{
-                //divide this into two divs side by side
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                width: "30vw",
-                height: "50vh",
-              }}
-            >
-              <div>
-                <div style={{ textAlign: "center", margin: "1rem" }}>
-                  <h1 style={{ color: "white" }}>IP Technologies</h1>
-                </div>
-                <div>
-                  IP Technologies are a highly-specialized IP hardware and
-                  software supplier and IP technology integration company with
-                  experience in commercial solutions in small, medium and large
-                  businesses across Australia as well as in residential
-                  applications.
-                </div>
-                <hr />
-                <div>
+                }
+                jobRoles={
+                  <>
+                    {" "}
+                    Roles:
+                    <div>Software Engineer</div>
+                    <div>IT Officer - Network and System Administrator</div>
+                  </>
+                }
+              />
+
+              <Page
+                pageNumber={2}
+                businessName={"Apple Inc."}
+                businessDescription={
+                  <>
+                    Apple Inc. is an American multinational corporation and
+                    technology company headquartered and incorporated in
+                    Cupertino, California, in Silicon Valley. It is best known
+                    for its consumer electronics, software, and services.
+                    Founded in 1976 as Apple Computer Company by Steve Jobs,
+                    Steve Wozniak and Ronald Wayne, the company was incorporated
+                    by Jobs and Wozniak as Apple Computer, Inc. the following
+                    year. It was renamed Apple Inc. in 2007 as the company had
+                    expanded its focus from computers to consumer electronics.
+                    Apple is the largest technology company by revenue, with
+                    US$391.04 billion in 2024.
+                  </>
+                }
+                jobRoles={
+                  <>
+                    Apple Corporate Roles:
+                    <div>Apple Advisor Coach</div>
+                    <div>Mac+ Senior Advisor</div>
+                    <div>iOS Senior Advisor</div>
+                  </>
+                }
+                jobDescription={undefined}
+              />
+
+              <Page
+                pageNumber={3}
+                businessName={"IP Technologies"}
+                businessDescription={
+                  <>
+                    IP Technologies are a highly-specialized IP hardware and
+                    software supplier and IP technology integration company with
+                    experience in commercial solutions in small, medium and
+                    large businesses across Australia as well as in residential
+                    applications.
+                  </>
+                }
+                jobDescription={
                   <ul>
                     <li>
                       Data Cabling & Network Rack Installations, Phillips
@@ -309,26 +305,27 @@ const Scene = () => {
                       Installations, Boardroom Automation
                     </li>
                   </ul>
-                </div>
-                <div>
-                  Roles:
-                  <div>IT Trade Assistant</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </Scroll>
-
-      {/* <ambientLight intensity={1} /> */}
+                }
+                jobRoles={
+                  <>
+                    Roles:
+                    <div>IT Trade Assistant</div>
+                  </>
+                }
+              />
+            </Box>
+            <Box flex={1}></Box>
+          </Box>
+        </Scroll>
+      </ScrollControls>
     </>
   );
 };
 
 const WorkExperienceDivWrapper = styled.div`
-  position: fixed;
-  width: 100%;
-  height: 100%;
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
   margin: 0;
   padding: 0;
   background-color: #272727;
@@ -344,14 +341,24 @@ const WorkExperienceDivWrapper = styled.div`
 export const WorkExperienceCanvas = () => {
   return (
     <WorkExperienceDivWrapper>
-      <Canvas dpr={window.devicePixelRatio}>
-        <Stage preset="rembrandt" intensity={1} environment="city">
-          <Suspense fallback={null}>
-            <ScrollControls pages={3} damping={0.25}>
-              <Scene />
-            </ScrollControls>
-          </Suspense>
-        </Stage>
+      <Canvas
+        dpr={window.devicePixelRatio}
+        camera={{
+          position: [0, 0, 0],
+          fov: 75,
+        }}
+        gl={{ antialias: false }}
+      >
+        <Stats />
+        <directionalLight
+          position={[-1.3, 6.0, 4.4]}
+          castShadow
+          intensity={Math.PI * 1}
+        />
+        <ambientLight intensity={1} />
+        <Suspense fallback={null}>
+          <Scene />
+        </Suspense>
       </Canvas>
 
       <Loader />
