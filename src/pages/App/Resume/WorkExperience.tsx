@@ -1,29 +1,17 @@
-import React, {
-  Suspense,
-  useEffect,
-  useRef,
-  useLayoutEffect,
-  Fragment,
-} from "react";
+import React, { Suspense, useEffect, useRef } from "react";
 import { Canvas, useFrame, useLoader, useThree } from "@react-three/fiber";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import {
-  Box,
-  OrbitControls,
-  Texture,
   ScrollControls,
   Scroll,
   useScroll,
   Loader,
   Stage,
-  Stars,
   Clouds,
   Cloud,
   Center,
 } from "@react-three/drei";
-import { useControls } from "leva";
-import gsap from "gsap";
-import { cameraPosition, Color } from "three/webgpu";
+import { Color } from "three/webgpu";
 import cemshirtUrl from "../../../assets/models/cemshirt.glb";
 import appleshirtUrl from "../../../assets/models/appleshirt.glb";
 import iptechshirtUrl from "../../../assets/models/iptechshirt.glb";
@@ -36,9 +24,8 @@ const Scene = () => {
 
   const shirtsGroupRef = useRef();
 
-  const { camera, scene, MeshBasicMaterial } = useThree();
+  const { scene, MeshBasicMaterial } = useThree();
   const scroll = useScroll();
-  const timeline = useRef();
 
   // const { position, rotation, cameraPositionIndex, usePositionSlider, useScrollBarPosition } = useControls({
   //   useScrollBarPosition: { value: true },
@@ -48,11 +35,11 @@ const Scene = () => {
   //   rotation: { value: [0, -1, 0], step: 0.01 },
   // });
 
-  const [useScrollBarPosition, setUseScrollBarPosition] = React.useState(true);
-  const [usePositionSlider, setUsePositionSlider] = React.useState(true);
-  const [cameraPositionIndex, setCameraPositionIndex] = React.useState(0);
-  const [position, setPosition] = React.useState([-0.8, 0.1, 2.5]);
-  const [rotation, setRotation] = React.useState([0, -1, 0]);
+  const [useScrollBarPosition] = React.useState(true);
+  const [usePositionSlider] = React.useState(true);
+  const [cameraPositionIndex] = React.useState(0);
+  const [position] = React.useState([-0.8, 0.1, 2.5]);
+  const [rotation] = React.useState([0, -1, 0]);
 
   const cemshirt = useLoader(GLTFLoader, cemshirtUrl);
   const appleshirt = useLoader(GLTFLoader, appleshirtUrl);
@@ -64,7 +51,7 @@ const Scene = () => {
     { position: [1.9, 0, 4.65], rotation: [0, 1, 0] },
   ];
 
-  useFrame((state, delta) => {
+  useFrame(() => {
     cemshirtRef.current.rotation.y += 0.005;
     appleshirtRef.current.rotation.y += 0.005;
     iptechshirtRef.current.rotation.y += 0.005;

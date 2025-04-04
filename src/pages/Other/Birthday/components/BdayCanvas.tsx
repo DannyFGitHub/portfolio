@@ -1,12 +1,18 @@
 import * as THREE from "three";
-import { useRef, useState } from "react";
-import { Canvas, useFrame, ThreeElements } from "@react-three/fiber";
+import { Dispatch, SetStateAction, useRef, useState } from "react";
+import {
+  Canvas,
+  useFrame,
+  ThreeElements,
+  ThreeEvent,
+} from "@react-three/fiber";
 import { LayerInterface } from "./birthdaymixer";
-import { Text3D, useScroll, ScrollControls } from "@react-three/drei";
+import { Text3D, ScrollControls } from "@react-three/drei";
 import ExplosionConfetti from "./r3fConfetti";
 import NatureBeautyFont from "../fonts/NatureBeauty-Typeface.ttf";
 import LavishlyYoursFont from "../fonts/LavishlyYours-typeface.ttf";
 import { MousePerspectiveRig } from "../../../../components/PerspectiveRig";
+import { CandleLogic } from "./types";
 
 function Plate(props: ThreeElements["mesh"]) {
   const meshRef = useRef<THREE.Mesh>(null!);
@@ -20,8 +26,7 @@ function Plate(props: ThreeElements["mesh"]) {
 
 function CakeBread(props: ThreeElements["mesh"]) {
   const meshRef = useRef<THREE.Mesh>(null!);
-  const [hovered, setHover] = useState(false);
-  const [active, setActive] = useState(false);
+  const [, setActive] = useState(false);
 
   return (
     <mesh
@@ -32,10 +37,10 @@ function CakeBread(props: ThreeElements["mesh"]) {
           props.onClick(event);
         }
       }}
-      onPointerDown={(event) => {
+      onPointerDown={() => {
         setActive(true);
       }}
-      onPointerUp={(event) => {
+      onPointerUp={() => {
         setActive(false);
       }}
     >
@@ -45,10 +50,9 @@ function CakeBread(props: ThreeElements["mesh"]) {
   );
 }
 
-function CakeTop(props: ThreeElements["mesh"]) {
+function CakeTop(props: ThreeElements["mesh"] & { color: string }) {
   const meshRef = useRef<THREE.Mesh>(null!);
-  const [hovered, setHover] = useState(false);
-  const [active, setActive] = useState(false);
+  const [, setActive] = useState(false);
 
   const color = props.color ? props.color : "#ED9CA3";
 
@@ -56,10 +60,10 @@ function CakeTop(props: ThreeElements["mesh"]) {
     <mesh
       {...props}
       ref={meshRef}
-      onPointerDown={(event) => {
+      onPointerDown={() => {
         setActive(true);
       }}
-      onPointerUp={(event) => {
+      onPointerUp={() => {
         setActive(false);
       }}
       receiveShadow
@@ -73,7 +77,6 @@ function CakeTop(props: ThreeElements["mesh"]) {
 
 function CandleBodyOutline(props: ThreeElements["mesh"]) {
   const meshRef = useRef<THREE.Mesh>(null!);
-  const [hovered, setHover] = useState(false);
   const [active, setActive] = useState(false);
   return (
     <mesh
@@ -85,10 +88,10 @@ function CandleBodyOutline(props: ThreeElements["mesh"]) {
           props.onClick(event);
         }
       }}
-      onPointerDown={(event) => {
+      onPointerDown={() => {
         setActive(true);
       }}
-      onPointerUp={(event) => {
+      onPointerUp={() => {
         setActive(false);
       }}
       castShadow
@@ -99,9 +102,13 @@ function CandleBodyOutline(props: ThreeElements["mesh"]) {
   );
 }
 
-function CandleBody(props: ThreeElements["mesh"]) {
+function CandleBody(
+  props: ThreeElements["mesh"] & {
+    color: string;
+    onClick: (event: ThreeEvent<MouseEvent>) => void;
+  }
+) {
   const meshRef = useRef<THREE.Mesh>(null!);
-  const [hovered, setHover] = useState(false);
   const [active, setActive] = useState(false);
 
   const color = props.color ? props.color : "#2f74c0";
@@ -116,10 +123,10 @@ function CandleBody(props: ThreeElements["mesh"]) {
           props.onClick(event);
         }
       }}
-      onPointerDown={(event) => {
+      onPointerDown={() => {
         setActive(true);
       }}
-      onPointerUp={(event) => {
+      onPointerUp={() => {
         setActive(false);
       }}
       castShadow
@@ -130,11 +137,15 @@ function CandleBody(props: ThreeElements["mesh"]) {
   );
 }
 
-function FlameOutside(props: ThreeElements["mesh"]) {
+function FlameOutside(
+  props: ThreeElements["mesh"] & {
+    onClick: (event: ThreeEvent<MouseEvent>) => void;
+  }
+) {
   const meshRef = useRef<THREE.Mesh>(null!);
   const [hovered, setHover] = useState(false);
   const [active, setActive] = useState(false);
-  useFrame((state, delta) => (meshRef.current.rotation.y += delta * 3.4));
+  useFrame((_state, delta) => (meshRef.current.rotation.y += delta * 3.4));
   return (
     <mesh
       {...props}
@@ -145,13 +156,13 @@ function FlameOutside(props: ThreeElements["mesh"]) {
           props.onClick(event);
         }
       }}
-      onPointerDown={(event) => {
+      onPointerDown={() => {
         setActive(true);
       }}
-      onPointerUp={(event) => {
+      onPointerUp={() => {
         setActive(false);
       }}
-      onPointerOver={(event) => setHover(true)}
+      onPointerOver={() => setHover(true)}
       onPointerOut={(event) => {
         if (props.onClick) {
           props.onClick(event);
@@ -165,11 +176,15 @@ function FlameOutside(props: ThreeElements["mesh"]) {
   );
 }
 
-function Flame(props: ThreeElements["mesh"]) {
+function Flame(
+  props: ThreeElements["mesh"] & {
+    onClick: (event: ThreeEvent<MouseEvent>) => void;
+  }
+) {
   const meshRef = useRef<THREE.Mesh>(null!);
   const [hovered, setHover] = useState(false);
   const [active, setActive] = useState(false);
-  useFrame((state, delta) => (meshRef.current.rotation.y += delta * 3.4));
+  useFrame((_state, delta) => (meshRef.current.rotation.y += delta * 3.4));
   return (
     <mesh
       {...props}
@@ -180,13 +195,13 @@ function Flame(props: ThreeElements["mesh"]) {
           props.onClick(event);
         }
       }}
-      onPointerDown={(event) => {
+      onPointerDown={() => {
         setActive(true);
       }}
-      onPointerUp={(event) => {
+      onPointerUp={() => {
         setActive(false);
       }}
-      onPointerOver={(event) => setHover(true)}
+      onPointerOver={() => setHover(true)}
       onPointerOut={(event) => {
         if (props.onClick) {
           props.onClick(event);
@@ -211,7 +226,11 @@ const sprinkleColors = [
 ];
 const cakeTopRandomColorIndex = randomIntBetween(0, sprinkleColors.length - 1);
 
-function Sprinkle(props: ThreeElements["mesh"]) {
+function Sprinkle(
+  props: ThreeElements["mesh"] & {
+    sprinkleColorIndex: number;
+  }
+) {
   const meshRef = useRef<THREE.Mesh>(null!);
   return (
     <mesh {...props} ref={meshRef}>
@@ -240,27 +259,36 @@ export function Environment3D({
   setCandleLogic,
   audioMixer,
   isGameCompleted,
+}: {
+  age: number;
+  candleLogic: CandleLogic[];
+  setCandleLogic: Dispatch<SetStateAction<CandleLogic[]>>;
+  audioMixer;
+  isGameCompleted: boolean;
 }) {
-  const [candleLocations, setCandleLocations] = useState(
-    candleLogic.map((item, index) => {
-      const radius = 7;
-      return [
-        Math.sin((index / candleLogic.length) * Math.PI * 2) * radius,
-        3,
-        Math.cos((index / candleLogic.length) * Math.PI * 2) * radius,
-      ];
-    })
+  const [candleLocations] = useState(
+    candleLogic.map(
+      (
+        _item: CandleLogic,
+        index: number
+      ): [x: number, y: number, z: number] => {
+        const radius = 7;
+        return [
+          Math.sin((index / candleLogic.length) * Math.PI * 2) * radius,
+          3,
+          Math.cos((index / candleLogic.length) * Math.PI * 2) * radius,
+        ];
+      }
+    )
   );
-  const [candleColorIndexes, setCandleColorIndexes] = useState<number[]>(
+  const [candleColorIndexes] = useState<number[]>(
     candleLogic.map(() => {
       return randomIntBetween(0, sprinkleColors.length - 1);
     })
   );
 
-  const [sprinkleLocations, setSprinkleLocations] = useState<
-    [number, number, number][]
-  >(
-    Array.from({ length: 300 }, (item, index) => {
+  const [sprinkleLocations] = useState<[number, number, number][]>(
+    Array.from({ length: 300 }, () => {
       return [
         (-Math.random() * 11) / 2 + 2.6,
         1.1,
@@ -279,7 +307,7 @@ export function Environment3D({
     // Reduce the number for the current candle index
     candleLogic[index].numBlowsToExtinguish =
       candleLogic[index].numBlowsToExtinguish - 1;
-    setCandleLogic((prevState) => {
+    setCandleLogic(() => {
       return [...candleLogic];
     });
     // If its zero, then set the candle to unlit Candle
@@ -326,17 +354,13 @@ export function Environment3D({
                     <>
                       <Flame
                         position={[pos[0], pos[1] + 1.5, pos[2]]}
-                        onClick={(
-                          event: React.MouseEvent<HTMLButtonElement>
-                        ) => {
+                        onClick={() => {
                           handleClickOnCandleIndex(index);
                         }}
                       />
                       <FlameOutside
                         position={[pos[0], pos[1] + 1.5, pos[2]]}
-                        onClick={(
-                          event: React.MouseEvent<HTMLButtonElement>
-                        ) => {
+                        onClick={() => {
                           handleClickOnCandleIndex(index);
                         }}
                       />
@@ -345,14 +369,14 @@ export function Environment3D({
                   <>
                     <CandleBody
                       position={pos}
-                      onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
+                      onClick={() => {
                         handleClickOnCandleIndex(index);
                       }}
                       color={sprinkleColors[candleColorIndexes[index]]}
                     />
                     <CandleBodyOutline
                       position={pos}
-                      onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
+                      onClick={() => {
                         handleClickOnCandleIndex(index);
                       }}
                     />
@@ -445,6 +469,12 @@ export function BDayCanvas({
   setCandleLogic,
   audioMixer,
   isGameCompleted,
+}: {
+  age: number;
+  candleLogic: CandleLogic[];
+  setCandleLogic: Dispatch<SetStateAction<CandleLogic[]>>;
+  audioMixer;
+  isGameCompleted: boolean;
 }) {
   return (
     <Canvas

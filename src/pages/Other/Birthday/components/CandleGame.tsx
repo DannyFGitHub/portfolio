@@ -6,10 +6,11 @@ import { ShareBDay } from "./ShareBDay";
 import { BdayButton } from "./BdayButton";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
+import { CandleLogic } from "./types";
 
-function prepareCandles(age: number) {
+function prepareCandles(age: number): CandleLogic[] {
   let candleLife = 1;
-  let candleLogic = [];
+  let candleLogic: CandleLogic[] = [];
   for (let i = 0; i < age; i++) {
     candleLogic[i] = {
       numBlowsToExtinguish:
@@ -44,7 +45,7 @@ export function CandleGame({ age }: { age?: number }) {
     age = new Date(Date.now()).getFullYear() - 1995;
 
   const [candleLogic, setCandleLogic] = useState(prepareCandles(age));
-  const [currentStage, setCurrentStage] = useState(1);
+  const [, setCurrentStage] = useState(1);
   const [startGame, setStartGame] = useState(false);
   const [candleGameCompleted, setCandleGameCompleted] = useState(false);
 

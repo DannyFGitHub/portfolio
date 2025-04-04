@@ -35,11 +35,22 @@ const ExplosionConfetti = forwardRef(function ExplosionConfetti(
     colors = [0x0000ff, 0xff0000, 0xffff00],
     enableShadows = false,
     ...props
+  }: {
+    isExploding: boolean;
+    amount: number;
+    rate: number;
+    radius: number;
+    areaWidth: number;
+    areaHeight: number;
+    fallingHeight: number;
+    fallingSpeed: number;
+    colors: number[];
+    enableShadows: boolean;
   },
   ref
 ) {
   if (!ref) ref = useRef(null!);
-  const [booms, setBooms] = useState([]);
+  const [booms, setBooms] = useState<THREE.Object3D[] | []>([]);
 
   rate = rate / 100;
   const geometry = new THREE.PlaneGeometry(0.03, 0.03, 1, 1);
