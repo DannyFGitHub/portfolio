@@ -42,29 +42,6 @@ function Shirt(props) {
 
   const [pos, setPos] = useState();
 
-  useFrame(() => {
-    // data.offset = current scroll position, between 0 and 1, dampened
-    // data.delta = current delta, between 0 and 1, dampened
-
-    // Will be 0 when the scrollbar is at the starting position,
-    // then increase to 1 until 1 / 3 of the scroll distance is reached
-    const a = data.range(0, 1 / 3);
-    // Will start increasing when 1 / 3 of the scroll distance is reached,
-    // and reach 1 when it reaches 2 / 3rds.
-    const b = data.range(1 / 3, 1 / 3);
-    // Same as above but with a margin of 0.1 on both ends
-    const c = data.range(1 / 3, 1 / 3, 0.1);
-    // Will move between 0-1-0 for the selected range
-    const d = data.curve(1 / 3, 1 / 3);
-    // Same as above, but with a margin of 0.1 on both ends
-    const e = data.curve(1 / 3, 1 / 3, 0.1);
-    // Returns true if the offset is in range and false if it isn't
-    const f = data.visible(2 / 3, 1 / 3);
-    // The visible function can also receive a margin
-    const g = data.visible(2 / 3, 1 / 3, 0.1);
-
-    console.log(a, b, c, d, e, f, g);
-  });
   return <primitive ref={ref} {...props} />;
 }
 
@@ -81,7 +58,6 @@ function Page({
         position: "relative",
         color: "white",
         height: "100vh",
-        width: "100%",
         top: 0 * pageNumber + "vh",
       }}
       p={{ sm: 0, md: 2, lg: 4 }}
@@ -106,11 +82,20 @@ function Page({
           justifyContent="center"
           alignItems="center"
           flexDirection="column"
+          width="100%"
         >
-          <Typography flex="1" variant="h1">
-            {businessName}
-          </Typography>
-          <Box flex="2">{businessDescription}</Box>
+          <Typography variant="h2">{businessName}</Typography>
+        </Box>
+
+        <Box
+          p={{ sm: 0, md: 2, lg: 4 }}
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          flexDirection="column"
+          width="100%"
+        >
+          {businessDescription}
         </Box>
         <hr style={{ width: "100%" }} />
         <Box
@@ -120,6 +105,7 @@ function Page({
           justifyContent="center"
           alignItems="center"
           flexDirection="column"
+          width="100%"
         >
           {jobDescription}
         </Box>
@@ -130,6 +116,7 @@ function Page({
           justifyContent="center"
           alignItems="center"
           flexDirection="column"
+          width="100%"
         >
           {jobRoles}
         </Box>
@@ -209,7 +196,7 @@ const Scene = () => {
         <Scroll html>
           <Box display="flex">
             <Box
-              flex={1}
+              flex={{ sm: 8, md: 3 }}
               display="flex"
               justifyContent="center"
               flexDirection="column"
@@ -248,7 +235,6 @@ const Scene = () => {
                 }
                 jobRoles={
                   <>
-                    {" "}
                     Roles:
                     <div>Software Engineer</div>
                     <div>IT Officer - Network and System Administrator</div>
@@ -314,7 +300,7 @@ const Scene = () => {
                 }
               />
             </Box>
-            <Box flex={1}></Box>
+            <Box flex={2}></Box>
           </Box>
         </Scroll>
       </ScrollControls>
@@ -349,7 +335,7 @@ export const WorkExperienceCanvas = () => {
         }}
         gl={{ antialias: false }}
       >
-        <Stats />
+        {/* <Stats /> */}
         <directionalLight
           position={[-1.3, 6.0, 4.4]}
           castShadow
