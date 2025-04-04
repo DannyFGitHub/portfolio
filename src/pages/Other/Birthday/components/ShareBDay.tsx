@@ -15,6 +15,7 @@ export function ShareBDay() {
         "//" +
         location.host +
         location.pathname +
+        location.hash.split("?")[0] +
         "?age=" +
         num
     );

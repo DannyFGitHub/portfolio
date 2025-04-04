@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.tsx";
 import { ErrorPage } from "./pages/404.tsx";
-import { BrowserRouter, Routes, Route } from "react-router";
+import { HashRouter, Routes, Route } from "react-router";
 import { IntroductionPage } from "./pages/App/IntroductionPage.tsx";
 import { OtherPage } from "./pages/Other/OtherPage.tsx";
 import { BirthdayContainer } from "./pages/Other/Birthday/BirthdayContainer.tsx";
@@ -23,7 +23,7 @@ createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <BrowserRouter>
+      <HashRouter>
         <Routes>
           <Route path="/" element={<App />}>
             <Route path="" element={<IntroductionPage />} />
@@ -35,7 +35,7 @@ createRoot(document.getElementById("root")!).render(
           </Route>
           <Route path="*" errorElement={<ErrorPage />} />
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
     </ThemeProvider>
   </StrictMode>
 );
