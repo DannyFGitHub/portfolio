@@ -140,7 +140,7 @@ export function IntroductionPage() {
               data: {
                 line1: "Danny",
                 line2: "Work",
-                // navPath: "/work"
+                navPath: "/work",
               },
             },
             {
