@@ -187,6 +187,14 @@ export function IntroductionPage() {
               id: "6",
               data: {
                 line1: "Danny",
+                line2: "Advocacy",
+                // navPath: "/abolish",
+              },
+            },
+            {
+              id: "7",
+              data: {
+                line1: "Danny",
                 line2: "Gallery",
                 // navPath: "/gallery",
               },
