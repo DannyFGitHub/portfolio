@@ -86,6 +86,7 @@ export function IntroductionPage() {
         flexDirection="column"
         justifyContent="center"
         alignItems="center"
+        p={2}
       >
         <Box
           display="flex"
@@ -132,7 +133,7 @@ export function IntroductionPage() {
           </Box>
         </Box>
       </Box>
-      <Box flex="4">
+      <Box flex="3">
         <BubbleVerseCanvas
           responses={[
             {
@@ -151,30 +152,30 @@ export function IntroductionPage() {
                 navPath: "https://arxiv.org/pdf/2410.12589v1",
               },
             },
-            // {
-            //   id: "2",
-            //   data: {
-            //     line1: "Danny",
-            //     line2: "Projects",
-            //     navPath: "",
-            //   },
-            // },
-            // {
-            //   id: "3",
-            //   data: {
-            //     line1: "Danny",
-            //     line2: "Theology",
-            //     navPath: "",
-            //   },
-            // },
-            // {
-            //   id: "4",
-            //   data: {
-            //     line1: "Danny",
-            //     line2: "Music",
-            //     navPath: "",
-            //   },
-            // },
+            {
+              id: "2",
+              data: {
+                line1: "Danny",
+                line2: "Projects",
+                navPath: "",
+              },
+            },
+            {
+              id: "3",
+              data: {
+                line1: "Danny",
+                line2: "Theology",
+                navPath: "",
+              },
+            },
+            {
+              id: "4",
+              data: {
+                line1: "Danny",
+                line2: "Music",
+                navPath: "",
+              },
+            },
             {
               id: "5",
               data: {
@@ -183,22 +184,22 @@ export function IntroductionPage() {
                 navPath: "/misc",
               },
             },
-            // {
-            //   id: "6",
-            //   data: {
-            //     line1: "Danny",
-            //     line2: "Advocacy",
-            //     // navPath: "/abolish",
-            //   },
-            // },
-            // {
-            //   id: "7",
-            //   data: {
-            //     line1: "Danny",
-            //     line2: "Gallery",
-            //     // navPath: "/gallery",
-            //   },
-            // },
+            {
+              id: "6",
+              data: {
+                line1: "Danny",
+                line2: "Advocacy",
+                // navPath: "/abolish",
+              },
+            },
+            {
+              id: "7",
+              data: {
+                line1: "Danny",
+                line2: "Gallery",
+                // navPath: "/gallery",
+              },
+            },
           ]}
           onStopLoadSound={() => {}}
         />

@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
-import { useScroll } from "@react-three/drei";
+import { useScroll, useBounds } from "@react-three/drei";
 import { easing } from "maath";
 import { Group } from "three";
 

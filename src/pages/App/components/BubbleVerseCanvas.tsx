@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Mesh } from "three";
 import {
   Center,
@@ -8,6 +8,7 @@ import {
   Html,
   ScrollControls,
   Loader,
+  Bounds,
 } from "@react-three/drei";
 import MegrimFont from "../../../assets/fonts/Megrim_Medium-typeface.ttf";
 import BrunoFont from "../../../assets/fonts/Bruno Ace SC_Regular-typeface.ttf";
@@ -20,6 +21,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
 import { FLogo3D } from "./FLogo3D";
+import { useWindowSize } from "../../../hooks/useWindowsSize";
 
 const colors = [
   "#D32F2F",
@@ -94,9 +96,7 @@ export default function BubbleVerseCanvas(props) {
   const { responses, onStopLoadSound } = props;
   const canvasRef = useRef(null);
   const mainGroupRef = useRef(null);
-
-  const [orbitalControlsPositioning, setOrbitalControlsPositioning] =
-    useState();
+  const { width, height } = useWindowSize();
 
   const [playPop] = useSound(pop, { volume: 0.75 });
 
@@ -142,16 +142,6 @@ export default function BubbleVerseCanvas(props) {
     // setPositions(calculateRandomPositions(responses));
   }, [responses, playPop, onStopLoadSound]);
 
-  const handleOnEndOrbital = (e) => {
-    setOrbitalControlsPositioning(
-      e.target.object.position.x +
-        " " +
-        e.target.object.position.y +
-        " " +
-        e.target.object.position.z
-    );
-  };
-
   return (
     <Canvas
       ref={canvasRef}
@@ -160,7 +150,7 @@ export default function BubbleVerseCanvas(props) {
         height: "100%",
         width: "100%",
       }}
-      camera={{ position: [0, 0, 20], fov: 20 }}
+      camera={{ position: [0, 0, 20], fov: 40 }}
     >
       <directionalLight position={[20, -30, 20]} intensity={Math.PI * 1} />
       <directionalLight position={[-30, 50, 5]} intensity={Math.PI * 1} />
@@ -170,7 +160,11 @@ export default function BubbleVerseCanvas(props) {
       <MousePerspectiveRig
         ref={mainGroupRef}
         rotation={[-Math.PI * 0.1, 0, 0]}
-        scale={[0.5, 0.5, 0.5]}
+        scale={
+          height !== undefined && width !== undefined && width < 800
+            ? [0.7, 0.7, 0.7]
+            : [1, 1, 1]
+        }
         disableScroll
       >
         <group rotation={[0, 0, 0]}>
@@ -183,7 +177,6 @@ export default function BubbleVerseCanvas(props) {
                   key={index}
                   navigationLink={response.data.navPath}
                   position={[0, 0, 0]}
-                  orbitalControlsPosition={orbitalControlsPositioning}
                   responseId={response.id}
                   meshColor={randomColors[index]}
                 />
@@ -233,6 +226,7 @@ export default function BubbleVerseCanvas(props) {
           />
         </group>
       </MousePerspectiveRig>
+
       <Loader />
     </Canvas>
   );

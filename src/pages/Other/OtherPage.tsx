@@ -128,7 +128,7 @@ function ResponsiveAppBar() {
             }}
             fontFamily="jac"
           >
-            DannyMisc Collection
+            DannyMisc
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
