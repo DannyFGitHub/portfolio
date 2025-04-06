@@ -9,6 +9,8 @@ import { OtherPage } from "./pages/Other/OtherPage.tsx";
 import { BirthdayContainer } from "./pages/Other/Birthday/BirthdayContainer.tsx";
 import { WorkExperienceCanvas } from "./pages/App/Resume/WorkExperience.tsx";
 import { Gallery } from "./pages/Gallery/Gallery.tsx";
+import { FilmMakingContainer } from "./pages/Other/FilmMaking.tsx";
+import { MiscLandingPage } from "./pages/Other/MiscLandingPage.tsx";
 
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "@mui/material/styles";
@@ -31,7 +33,9 @@ createRoot(document.getElementById("root")!).render(
           </Route>
           <Route path="/gallery" element={<Gallery />}></Route>
           <Route path="/misc" element={<OtherPage />}>
+            <Route path="" element={<MiscLandingPage />} />
             <Route path="birthday" element={<BirthdayContainer />} />
+            <Route path="filmmaking" element={<FilmMakingContainer />} />
           </Route>
           <Route path="*" errorElement={<ErrorPage />} />
         </Routes>

@@ -16,13 +16,9 @@ import { useNavigate, Outlet } from "react-router";
 import { useWindowSize } from "../../hooks/useWindowsSize";
 import React, { useState } from "react";
 import { DarkModeToggle2DButton } from "../App/components/DarkModeToggle2D";
-
+import { pages } from "./MiscPages";
 const HEADER_HEIGHT = 56;
 
-const pages = [
-  { display: "Home", location: "/" },
-  { display: "Birthday Card", location: "/misc/birthday" },
-];
 const settings = ["Reset"];
 
 function ResponsiveAppBar() {

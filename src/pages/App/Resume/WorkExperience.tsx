@@ -125,6 +125,14 @@ function Page({
   );
 }
 
+function TempLink({ loc, disp }: { loc: string; disp: string }) {
+  return (
+    <a style={{ color: "lightblue" }} href={loc}>
+      {disp}
+    </a>
+  );
+}
+
 const Scene = () => {
   const cemshirtRef = useRef();
   const appleshirtRef = useRef();
@@ -218,14 +226,24 @@ const Scene = () => {
                   <ul>
                     <li>
                       Designed and developed multiple web applications and
-                      services using various technologies: (.NET), React.js,
-                      NodeJs, Typescript, Swift, Firebase, AWS Serverless,
-                      Canvas LMS (JS Development)
+                      services using various technologies: Syncing Services,
+                      .NET,{" "}
+                      <TempLink
+                        loc="https://dannyfgithub.github.io/Timesheets-Demo-FrontEnd"
+                        disp="React.js"
+                      />
+                      , NodeJs, Typescript,{" "}
+                      <TempLink
+                        loc="https://apps.apple.com/au/app/cem-plain-conference-mode/id1490047083"
+                        disp="Swift"
+                      />
+                      , Firebase, AWS Serverless, Canvas LMS (JS Development)
                     </li>
                     <li>Integrations with Intercom, Twilio (SMS) & BurstSMS</li>
+                    <li>Google Apps Script & Google APIs</li>
                     <li>
                       Implemented cloud-based solutions using AWS Serverless &
-                      Workato
+                      Workato (Workato Automation Pro I & II, III)
                     </li>
                     <li>
                       CICD with Bitbucket Pipelines for automated testing &
@@ -268,7 +286,7 @@ const Scene = () => {
                     <div>iOS Senior Advisor</div>
                   </>
                 }
-                jobDescription={undefined}
+                jobDescription={<>Applecare Excellence Award Winner</>}
               />
 
               <Page
@@ -286,8 +304,12 @@ const Scene = () => {
                 jobDescription={
                   <ul>
                     <li>
-                      Data Cabling & Network Rack Installations, Phillips
-                      Dynalite Programming, Home Automation Light & Controller
+                      Data Cabling & Network Rack Installations,{" "}
+                      <TempLink
+                        loc="https://dynalite.com/"
+                        disp="Phillips Dynalite"
+                      />{" "}
+                      Programming, Home Automation Light & Controller
                       Installations, Boardroom Automation
                     </li>
                   </ul>
