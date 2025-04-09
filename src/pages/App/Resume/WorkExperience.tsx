@@ -54,6 +54,8 @@ function Page({
   jobDescription,
   jobRoles,
 }) {
+  const { mode } = useColorScheme();
+
   return (
     <Box
       display="flex"
@@ -83,7 +85,7 @@ function Page({
           height="100%"
           width="100%"
           style={{
-            filter: "drop-shadow(0px 0px 20px white)",
+            filter: `drop-shadow(0px 0px 20px ${mode === "dark" ? "white" : "darkgrey"})`,
           }}
           p={2}
         >
@@ -104,7 +106,7 @@ function Page({
           </Box>
           <hr style={{ width: "100%" }} />
           <Box
-            p={1}
+            p={2}
             m={1}
             display="flex"
             justifyContent="center"
@@ -115,7 +117,7 @@ function Page({
             <Typography variant="body1">{jobDescription}</Typography>
           </Box>
           <Box
-            p={1}
+            p={2}
             m={1}
             display="flex"
             justifyContent="center"
@@ -378,7 +380,7 @@ export const WorkExperienceCanvas = () => {
         <directionalLight
           position={[-1.3, 6.0, 4.4]}
           castShadow
-          intensity={Math.PI * (mode === "dark" ? 0.3 : 2)}
+          intensity={Math.PI * (mode === "dark" ? 0.45 : 2)}
         />
         <ambientLight intensity={1} />
         <Suspense fallback={null}>
