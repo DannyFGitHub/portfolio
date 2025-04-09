@@ -60,7 +60,7 @@ function ResponsiveAppBar() {
               color: "inherit",
               textDecoration: "none",
             }}
-            fontFamily="jac"
+            fontFamily="megrim"
           >
             DannyMisc
           </Typography>

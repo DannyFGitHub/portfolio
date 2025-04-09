@@ -1,6 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import BubbleVerseCanvas from "./components/BubbleVerseCanvas";
 import { FontSwitchingDannyVerse } from "./components/SwitchingAnimationFonts.tsx";
+import { ScrollIndicatorAnimated } from "./components/ScrollDownIndicator.tsx";
 
 export const PORTFOLIO_NAME = "Danny J. Falero";
 
@@ -52,7 +53,7 @@ export function NameLetterSpread(props) {
 
 export function IntroductionPage() {
   return (
-    <Box display="flex" flexDirection="column" width="100%" height="100%">
+    <Box width="100%" height="100%">
       <Box
         position="fixed"
         style={{
@@ -80,8 +81,8 @@ export function IntroductionPage() {
       </Box>
 
       <Box
-        flex="1"
         width="100%"
+        height="100%"
         display="flex"
         flexDirection="column"
         justifyContent="center"
@@ -94,28 +95,39 @@ export function IntroductionPage() {
           justifyContent="center"
           alignItems="center"
           width="100%"
+          height="100%"
         >
-          <Box display="flex" justifyContent="center" width="100%">
+          <Box
+            flex={4}
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            justifyContent="center"
+            width="100%"
+          >
             <Typography
               width="100%"
-              align="center"
+              align="justify"
               variant="h1"
-              fontFamily="megrim"
+              fontFamily="sixty"
+              fontWeight={800}
             >
               <NameLetterSpread text={PORTFOLIO_NAME} />
             </Typography>
+            <Box justifyContent="center">
+              <Typography align="center" variant="h3" fontFamily="concert">
+                Software Engineer, Machine Learning Engineer
+              </Typography>
+            </Box>
+            <Box justifyContent="center">
+              <Typography align="center" variant="h4" fontFamily="concert">
+                Applied Researcher and PhD Student
+              </Typography>
+            </Box>
           </Box>
-          <Box justifyContent="center">
-            <Typography variant="h6" fontFamily="viaoda">
-              Software Engineer, Machine Learning Engineer
-            </Typography>
-          </Box>
-          <Box justifyContent="center">
-            <Typography variant="body1" fontFamily="viaoda">
-              Applied Researcher and PhD Student
-            </Typography>
-          </Box>
+
           <Box
+            flex={1}
             display="flex"
             flexDirection="column"
             justifyContent="center"
@@ -130,10 +142,11 @@ export function IntroductionPage() {
               Explore the
             </Typography>
             <FontSwitchingDannyVerse />
+            <ScrollIndicatorAnimated />
           </Box>
         </Box>
       </Box>
-      <Box flex="3">
+      <Box height="100%">
         <BubbleVerseCanvas
           responses={[
             {

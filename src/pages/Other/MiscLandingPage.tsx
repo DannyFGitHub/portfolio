@@ -1,8 +1,8 @@
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { pages } from "./MiscPages";
-import MenuItem from "@mui/material/MenuItem";
 import { useNavigate } from "react-router";
+import Button from "@mui/material/Button";
 
 export function MiscLandingPage() {
   const navigate = useNavigate();
@@ -14,19 +14,21 @@ export function MiscLandingPage() {
       display="flex"
       justifyContent="center"
       alignItems="center"
+      flexDirection="column"
     >
       <Typography variant="h3">Collection of Miscellanous Things...</Typography>
-
-      {pages.map((page) => (
-        <MenuItem
-          key={page.display}
-          onClick={() => {
-            navigate(page.location);
-          }}
-        >
-          <Typography sx={{ textAlign: "center" }}>{page.display}</Typography>
-        </MenuItem>
-      ))}
+      <Box>
+        {pages.map((page) => (
+          <Button
+            key={page.display}
+            onClick={() => {
+              navigate(page.location);
+            }}
+          >
+            <Typography sx={{ textAlign: "center" }}>{page.display}</Typography>
+          </Button>
+        ))}
+      </Box>
     </Box>
   );
 }

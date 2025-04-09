@@ -13,8 +13,8 @@ import SixtyFour from "../assets/fonts/Sixtyfour-Regular-VariableFont_BLED,SCAN.
 import SourGummy from "../assets/fonts/SourGummy-VariableFont_wdth,wght.woff2";
 import ViaodaLibre from "../assets/fonts/ViaodaLibre-Regular.woff2";
 
-const STATIC_COLOR = "rgb(180, 95, 95)";
-const bkgGradient = `radial-gradient(60% 105% at 0% 0%,rgb(21, 61, 93) 10%, ${STATIC_COLOR})`;
+const STATIC_COLOR = "rgb(43, 31, 31)";
+const bkgGradient = `radial-gradient(60% 105% at 0% 0%,rgb(26, 76, 116) 10%, ${STATIC_COLOR})`;
 
 const mainTheme = createTheme({
   colorSchemes: { light: true, dark: true },
