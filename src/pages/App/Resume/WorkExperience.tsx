@@ -214,13 +214,6 @@ const Scene = () => {
     })
   );
 
-  const viewportRef = useRef(viewport);
-
-  useEffect(() => {
-    // viewport is now guaranteed to be initialized
-    console.log("Viewport width:", viewportRef.current.width);
-  }, []);
-
   useFrame(() => {
     cemshirtRef.current.rotation.y += 0.005;
     appleshirtRef.current.rotation.y += 0.005;

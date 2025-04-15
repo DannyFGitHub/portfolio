@@ -20,8 +20,6 @@ function Desk(props: ThreeElements["group"]) {
       ref.current.rotation.y = -scroll.offset * (Math.PI * 1.33) + 0.4; // Rotate contents
     }
 
-    console.log(scroll.offset);
-
     state.events.update(); // Raycasts every frame rather than on pointer-move
   });
 

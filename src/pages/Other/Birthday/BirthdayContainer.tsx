@@ -27,7 +27,6 @@ export function BirthdayContainer({ ageProp }: { ageProp?: number }) {
 
   useEffect(() => {
     audioMixer.loadAudios((progress, total, allLoaded) => {
-      console.log(progress + "/" + total);
       if (allLoaded) setSoundLayersLoaded(allLoaded);
     });
 
