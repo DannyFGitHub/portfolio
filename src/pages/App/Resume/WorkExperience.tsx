@@ -64,7 +64,7 @@ function Page({
         width="100%"
         height="100%"
         justifyContent="center"
-        alignItems="center"
+        alignItems="end"
         flexDirection={"row"}
       >
         <Box
@@ -76,17 +76,16 @@ function Page({
             background: "white",
             borderRadius: "50px",
           }}
-          p={4}
+          p={{ sm: 2, md: 4 }}
         >
-          <Box p={1} m={1} display="relative" width="100%">
+          <Box p={2} display="relative" width="100%">
             <Typography fontFamily="shrik" variant="h2">
               {businessName}
             </Typography>
           </Box>
 
           <Box
-            p={1}
-            m={1}
+            p={2}
             display="flex"
             justifyContent="center"
             alignItems="center"
@@ -113,7 +112,6 @@ function Page({
           </Box>
           <Box
             p={2}
-            m={1}
             display="flex"
             justifyContent="center"
             alignItems="right"
@@ -138,7 +136,7 @@ function Page({
 
 function TempLink({ loc, disp }: { loc: string; disp: string }) {
   return (
-    <a style={{ color: "lightblue" }} href={loc}>
+    <a style={{ color: "purple" }} href={loc}>
       {disp}
     </a>
   );
