@@ -1,7 +1,8 @@
-import { usePlane } from "@react-three/cannon";
+import { PlaneProps, usePlane } from "@react-three/cannon";
+import { Color } from "three";
 
-export const Floor = (props) => {
-  const [ref] = usePlane((index) => ({ type: "Static", mass: 0, ...props }));
+export const Floor = (props: PlaneProps & { color: Color }) => {
+  const [ref] = usePlane((_index) => ({ type: "Static", mass: 0, ...props }));
 
   return (
     <mesh receiveShadow rotation={props.rotation} ref={ref}>

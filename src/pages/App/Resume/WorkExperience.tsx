@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { Canvas, useFrame, useLoader, useThree } from "@react-three/fiber";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import {
@@ -6,13 +6,12 @@ import {
   Scroll,
   useScroll,
   Loader,
-  Stage,
   Clouds,
   Cloud,
+  Environment,
+  AccumulativeShadows,
+  RandomizedLight,
   Center,
-  Html,
-  OrbitControls,
-  Stats,
 } from "@react-three/drei";
 import { Color } from "three/webgpu";
 import cemshirtUrl from "../../../assets/models/cemshirt.glb";
@@ -21,10 +20,12 @@ import iptechshirtUrl from "../../../assets/models/iptechshirt.glb";
 import styled from "styled-components";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import { ThemeProvider } from "@mui/material";
+import { theme } from "../../../themes/MainTheme";
 
 import { Group } from "three";
-import Paper from "@mui/material/Paper";
-import { useColorScheme, useTheme } from "@mui/material";
+import { useColorScheme } from "@mui/material";
+import { easing } from "maath";
 
 export function MousePerspectiveRig(props) {
   const ref = useRef<Group>(null!);
@@ -33,18 +34,10 @@ export function MousePerspectiveRig(props) {
     if (props?.disableScroll !== true) {
       ref.current.rotation.y = -scroll.offset * (Math.PI * 1.33) + 0.4; // Rotate contents
     }
+
     state.events.update(); // Raycasts every frame rather than on pointer-move
   });
   return <group ref={ref} {...props} />;
-}
-
-function Shirt(props) {
-  const ref = useRef();
-  const data = useScroll();
-
-  const [pos, setPos] = useState();
-
-  return <primitive ref={ref} {...props} />;
 }
 
 function Page({
@@ -54,8 +47,6 @@ function Page({
   jobDescription,
   jobRoles,
 }) {
-  const { mode } = useColorScheme();
-
   return (
     <Box
       display="flex"
@@ -74,23 +65,23 @@ function Page({
         height="100%"
         justifyContent="center"
         alignItems="center"
-        style={{
-          borderRadius: "50px",
-          boxShadow: "5px 5px 15px #bebebe, -5px -5px 15px #ffffff",
-        }}
-        flexDirection={{ xs: "column", md: "column", xl: "row" }}
+        flexDirection={"row"}
       >
         <Box
           flex={1}
-          height="100%"
           width="100%"
           style={{
-            filter: `drop-shadow(0px 0px 20px ${mode === "dark" ? "white" : "darkgrey"})`,
+            color: "black",
+            opacity: 0.9,
+            background: "white",
+            borderRadius: "50px",
           }}
-          p={2}
+          p={4}
         >
           <Box p={1} m={1} display="relative" width="100%">
-            <Typography variant="h2">{businessName}</Typography>
+            <Typography fontFamily="shrik" variant="h2">
+              {businessName}
+            </Typography>
           </Box>
 
           <Box
@@ -102,7 +93,9 @@ function Page({
             flexDirection="column"
             width="100%"
           >
-            <Typography variant="body2">{businessDescription}</Typography>
+            <Typography fontFamily="jersey" variant="body2">
+              {businessDescription}
+            </Typography>
           </Box>
           <hr style={{ width: "100%" }} />
           <Box
@@ -114,7 +107,9 @@ function Page({
             flexDirection="column"
             width="100%"
           >
-            <Typography variant="body1">{jobDescription}</Typography>
+            <Typography fontFamily="faculty" variant="body1">
+              {jobDescription}
+            </Typography>
           </Box>
           <Box
             p={2}
@@ -125,12 +120,17 @@ function Page({
             flexDirection="column"
             width="100%"
           >
-            <Typography variant="caption" align="right">
+            <Typography variant="caption" fontFamily="faculty" align="right">
               {jobRoles}
             </Typography>
           </Box>
         </Box>
-        <Box flex={2}></Box>
+        <Box
+          flex={{ lg: 1, xl: 3 }}
+          sx={{
+            display: { xs: "none", sm: "none", lg: "flex" },
+          }}
+        ></Box>
       </Box>
     </Box>
   );
@@ -144,6 +144,45 @@ function TempLink({ loc, disp }: { loc: string; disp: string }) {
   );
 }
 
+function Backdrop() {
+  const shadows = useRef(null);
+  useFrame((state, delta) =>
+    easing.dampC(
+      shadows.current.getMesh().material.color,
+      state.color,
+      0.25,
+      delta
+    )
+  );
+  return (
+    <AccumulativeShadows
+      ref={shadows}
+      temporal
+      frames={60}
+      alphaTest={0.85}
+      scale={5}
+      resolution={2048}
+      rotation={[Math.PI / 2, 0, 0]}
+      position={[0, 0, -0.14]}
+    >
+      <RandomizedLight
+        amount={4}
+        radius={9}
+        intensity={0.55 * Math.PI}
+        ambient={0.25}
+        position={[5, 5, -10]}
+      />
+      <RandomizedLight
+        amount={4}
+        radius={5}
+        intensity={0.25 * Math.PI}
+        ambient={0.55}
+        position={[-5, 5, -9]}
+      />
+    </AccumulativeShadows>
+  );
+}
+
 const Scene = () => {
   const cemshirtRef = useRef();
   const appleshirtRef = useRef();
@@ -151,7 +190,7 @@ const Scene = () => {
 
   const shirtsGroupRef = useRef();
 
-  const { scene, MeshBasicMaterial, viewport } = useThree();
+  const { scene, viewport } = useThree();
   const { mode, setMode } = useColorScheme();
 
   const cemshirt = useLoader(GLTFLoader, cemshirtUrl);
@@ -177,6 +216,13 @@ const Scene = () => {
     })
   );
 
+  const viewportRef = useRef(viewport);
+
+  useEffect(() => {
+    // viewport is now guaranteed to be initialized
+    console.log("Viewport width:", viewportRef.current.width);
+  }, []);
+
   useFrame(() => {
     cemshirtRef.current.rotation.y += 0.005;
     appleshirtRef.current.rotation.y += 0.005;
@@ -189,7 +235,7 @@ const Scene = () => {
 
   return (
     <>
-      <group position={[0, 0, -5]}>
+      {/* <group position={[0, 0, -5]}>
         <Clouds material={MeshBasicMaterial}>
           <Cloud
             seed={1}
@@ -199,19 +245,23 @@ const Scene = () => {
             fade={200}
           />
         </Clouds>
+      </group> */}
+      <group position={[0, 0, 0]}>
+        <Backdrop />
       </group>
       <ScrollControls pages={3} damping={0.25}>
         <Scroll>
-          <MousePerspectiveRig>
-            <group position={[0, -0.25, 0]} rotation={[0, Math.PI * 0.2, 0]}>
+          <MousePerspectiveRig position={[0, 0.16, 0]}>
+            <group rotation={[0, Math.PI * 0.2, 0]}>
               {shirtWithLoc.map((shirt, index) => {
                 return (
-                  <Shirt
+                  <primitive
                     ref={shirt.ref}
                     object={shirt.model.scene}
                     position={shirt.loc}
                     castShadow
-                    rotation={[0, -0.5, 0]}
+                    rotation={[0, Math.PI * 0.5, 0]}
+                    scale={[0.4, 0.4, 0.4]}
                   />
                 );
               })}
@@ -369,22 +419,31 @@ export const WorkExperienceCanvas = () => {
   return (
     <WorkExperienceDivWrapper>
       <Canvas
+        style={{
+          position: "relative",
+          width: "100%",
+          height: "100%",
+        }}
         dpr={window.devicePixelRatio}
         camera={{
           position: [0, 0, 0],
-          fov: 75,
+          fov: 25,
         }}
         gl={{ antialias: false }}
       >
+        <ambientLight intensity={0.5 * Math.PI} />
+        <Environment files="https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/potsdamer_platz_1k.hdr" />
         {/* <Stats /> */}
-        <directionalLight
+        {/* <directionalLight
           position={[-1.3, 6.0, 4.4]}
           castShadow
           intensity={Math.PI * (mode === "dark" ? 0.45 : 2)}
-        />
-        <ambientLight intensity={1} />
+        /> */}
+        {/* <ambientLight intensity={1} /> */}
         <Suspense fallback={null}>
-          <Scene />
+          <Center>
+            <Scene />
+          </Center>
         </Suspense>
       </Canvas>
 

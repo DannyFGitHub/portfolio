@@ -1,12 +1,19 @@
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useGLTF, useAnimations } from "@react-three/drei";
 import FLogo3DURL from "../../../assets/models/flogo.glb";
-import { MeshPhysicalMaterial } from "three";
+import { LoopRepeat } from "three";
 
 export function FLogo3D(props) {
   const group = useRef(null);
   const { nodes, materials, animations } = useGLTF(FLogo3DURL);
-  const { actions } = useAnimations(animations, group);
+  const { actions, names, mixer } = useAnimations(animations, group);
+
+  useEffect(() => {
+    mixer.timeScale = -1;
+    for (let name of names) {
+      actions[name]?.setLoop(LoopRepeat, 1).reset().play();
+    }
+  }, []);
 
   return (
     <group ref={group} {...props} dispose={null}>

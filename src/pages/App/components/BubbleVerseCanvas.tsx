@@ -1,14 +1,13 @@
 import { useEffect, useRef, useState } from "react";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { Canvas, useFrame } from "@react-three/fiber";
 import { Mesh } from "three";
 import {
   Center,
   Text3D,
-  OrbitControls,
-  Html,
-  ScrollControls,
   Loader,
-  Bounds,
+  AccumulativeShadows,
+  RandomizedLight,
+  AccumulativeShadowsProps,
 } from "@react-three/drei";
 import MegrimFont from "../../../assets/fonts/Megrim_Medium-typeface.ttf";
 import BrunoFont from "../../../assets/fonts/Bruno Ace SC_Regular-typeface.ttf";
@@ -17,11 +16,10 @@ import pop from "../../../assets/audio/pop.mp3";
 
 import { useNavigate } from "react-router";
 import { MousePerspectiveRig } from "../../../components/PerspectiveRig";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
 
 import { FLogo3D } from "./FLogo3D";
 import { useWindowSize } from "../../../hooks/useWindowsSize";
+import { OpenBook } from "../../../assets/models/OpenBook/OpenBook";
 
 const colors = [
   "#D32F2F",
@@ -57,8 +55,13 @@ function CanvasBox(props) {
       <mesh
         {...props}
         ref={mesh}
+        onPointerDown={() => {
+          setActive(true);
+        }}
+        onPointerUp={() => {
+          setActive(false);
+        }}
         onClick={(event) => {
-          setActive(!active);
           if (navigationLink.startsWith("http")) {
             window.location.href = navigationLink;
           } else {
@@ -70,13 +73,13 @@ function CanvasBox(props) {
         onPointerOut={(event) => setHover(false)}
         position={position}
       >
-        <sphereGeometry args={[active ? 1.1 : 1, 30, 20]} />
+        {/* <sphereGeometry args={[active ? 1.1 : 1, 30, 20]} /> */}
         {/* <meshBasicMaterial
           color={active ? "hotpink" : hovered ? "white" : props.meshColor}
           opacity={0.3}
           transparent
         /> */}
-        <meshPhysicalMaterial
+        {/* <meshPhysicalMaterial
           color={hovered ? "#EAEAEA" : props.meshColor}
           roughness={0.4}
           metalness={0}
@@ -86,6 +89,11 @@ function CanvasBox(props) {
           thickness={0.2}
           transparent
           opacity={0.4}
+        /> */}
+        <OpenBook
+          position={[0, -0.1, -0.2]}
+          scale={active ? [4, 4, 4] : [3.5, 3.5, 3.5]}
+          rotation={hovered ? [Math.PI * 0.5, 0, 0] : [Math.PI * 0.35, 0, 0]}
         />
       </mesh>
     </>
@@ -150,19 +158,19 @@ export default function BubbleVerseCanvas(props) {
         height: "100%",
         width: "100%",
       }}
-      camera={{ position: [0, 0, 20], fov: 40 }}
+      camera={{ position: [0, 0, 20], fov: 45 }}
     >
       <directionalLight position={[20, -30, 20]} intensity={Math.PI * 1} />
-      <directionalLight position={[-30, 50, 5]} intensity={Math.PI * 1} />
-      <directionalLight position={[-40, -60, 0]} intensity={Math.PI * 1} />
-      <directionalLight position={[10, 20, 5]} intensity={Math.PI * 1} />
+      {/* <directionalLight position={[-30, 50, 5]} intensity={Math.PI * 1} /> */}
+      {/* <directionalLight position={[-40, -60, 0]} intensity={Math.PI * 1} /> */}
+      <directionalLight position={[10, 20, 5]} intensity={Math.PI * 0.6} />
 
       <MousePerspectiveRig
         ref={mainGroupRef}
         rotation={[-Math.PI * 0.1, 0, 0]}
         scale={
           height !== undefined && width !== undefined && width < 800
-            ? [0.7, 0.7, 0.7]
+            ? [0.68, 0.68, 0.68]
             : [1, 1, 1]
         }
         disableScroll
@@ -171,7 +179,11 @@ export default function BubbleVerseCanvas(props) {
           {responses.map((response, index) => {
             const [x, y, z] = positions[index] || [0, 0, 0];
             return (
-              <group key={index} position={[x, y, 0]}>
+              <group
+                key={index}
+                position={[x, y, 0]}
+                scale={[0.85, 0.85, 0.85]}
+              >
                 <CanvasBox
                   canvasRef={canvasRef}
                   key={index}
@@ -180,6 +192,7 @@ export default function BubbleVerseCanvas(props) {
                   responseId={response.id}
                   meshColor={randomColors[index]}
                 />
+
                 <Center>
                   <Text3D
                     position={[0, 0.3, 0]}

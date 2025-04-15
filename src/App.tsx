@@ -1,12 +1,12 @@
 import { Outlet } from "react-router";
 
-import { DarkModeToggle2DFloatingComponent } from "./pages/App/components/DarkModeToggle2D";
+// import { DarkModeToggle2DFloatingComponent } from "./pages/App/components/DarkModeToggle2D";
 import Box from "@mui/material/Box";
 
 function App() {
   return (
     <Box style={{ height: "100%", width: "100%" }}>
-      <Box
+      {/* <Box
         style={{
           position: "fixed",
           bottom: 0,
@@ -14,7 +14,7 @@ function App() {
         }}
       >
         <DarkModeToggle2DFloatingComponent />
-      </Box>
+      </Box> */}
       <Box
         style={{
           position: "absolute",
