@@ -90,13 +90,17 @@ function Page({
             justifyContent="center"
             alignItems="center"
             flexDirection="column"
-            width="100%"
           >
             <Typography fontFamily="jersey" variant="body2">
               {businessDescription}
             </Typography>
           </Box>
-          <Box display="flex" alignItems="center" alignContent="center">
+          <Box
+            display="flex"
+            alignItems="center"
+            alignContent="center"
+            flexDirection="column"
+          >
             <hr style={{ width: "50%" }} />
           </Box>
           <Box
@@ -106,7 +110,6 @@ function Page({
             justifyContent="center"
             alignItems="center"
             flexDirection="column"
-            width="100%"
           >
             <Typography fontFamily="faculty" variant="body1">
               {jobDescription}
@@ -118,7 +121,6 @@ function Page({
             justifyContent="center"
             alignItems="right"
             flexDirection="column"
-            width="100%"
           >
             <Typography variant="caption" fontFamily="faculty" align="right">
               {jobRoles}
