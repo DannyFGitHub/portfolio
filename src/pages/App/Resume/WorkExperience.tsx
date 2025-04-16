@@ -96,7 +96,7 @@ function Page({
               {businessDescription}
             </Typography>
           </Box>
-          <hr style={{ width: "100%" }} />
+          <hr style={{ width: "50%" }} />
           <Box
             p={2}
             m={1}
