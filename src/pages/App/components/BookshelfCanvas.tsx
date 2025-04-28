@@ -1,6 +1,8 @@
-import { Canvas, ThreeElements, useFrame } from "@react-three/fiber";
+import { Canvas, ThreeElements, useFrame, useThree } from "@react-three/fiber";
 import { Suspense, useRef } from "react";
-import { Group, Mesh } from "three";
+import { Group, Mesh, RectAreaLight } from "three";
+import { RectAreaLightHelper } from "three/examples/jsm/helpers/RectAreaLightHelper";
+import { RectAreaLightUniformsLib } from "three/examples/jsm/lights/RectAreaLightUniformsLib.js";
 import { TableBookShelf } from "../../../assets/models/TableBookShelf/TableBookShelf";
 import {
   Loader,
@@ -8,11 +10,23 @@ import {
   Scroll,
   ScrollControls,
   useScroll,
+  Html,
 } from "@react-three/drei";
 import Box from "@mui/material/Box";
 import { OpenBook } from "../../../assets/models/OpenBook/OpenBook";
+import BooksMenu from "./Books";
+import { IntroductionOverlay } from "./IntroductionOverlay";
 
-function Desk(props: ThreeElements["group"]) {
+const BookOnTable = {
+  position: [0, 1.018, 0.28],
+  rotation: [0, 0, 0],
+};
+const BookOnShelf = {
+  position: [0, 1.2, -0.4],
+  rotation: [Math.PI * 0.5, 0, -Math.PI * 0.5],
+};
+
+function Desk(props: ThreeElements["group"] & { disableScroll?: boolean }) {
   const ref = useRef<Group>(null!);
   let scroll = useScroll();
   useFrame((state, delta) => {
@@ -40,7 +54,11 @@ function Desk(props: ThreeElements["group"]) {
         intensity={Math.PI * 0.3}
       />
       <Bookshelf position={[0, 0, 0]} />
-      <OpenBook position={[0, 1.018, 0.28]} />
+      <OpenBook
+        closed
+        position={BookOnShelf.position}
+        rotation={BookOnShelf.rotation}
+      />
       <Floor position={[0, 0, 0]} />
     </group>
   );
@@ -71,6 +89,22 @@ function Bookshelf(props: ThreeElements["group"]) {
   );
 }
 
+const RectArealightWithHelper = () => {
+  const { scene } = useThree();
+
+  RectAreaLightUniformsLib.init();
+
+  const rectLight = new RectAreaLight("white", 0.1, 1, 1);
+
+  // width={1} height={1} position={[0, 0, -2.4]}
+
+  rectLight.position.set(0, 0, -2.4);
+  scene.add(rectLight);
+  scene.add(new RectAreaLightHelper(rectLight));
+
+  return null;
+};
+
 export function BookshelfCanvas(props) {
   const canvasRef = useRef(null);
 
@@ -91,14 +125,90 @@ export function BookshelfCanvas(props) {
         camera={{ position: [0, 0, 0], fov: 30 }}
         shadows
       >
-        <OrbitControls makeDefault />
         <ambientLight intensity={Math.PI * 0.01} />
         <directionalLight position={[-40, -60, 0]} intensity={Math.PI * 0.02} />
+        <RectArealightWithHelper />
         <Suspense fallback={null}>
           <ScrollControls pages={2} damping={0.25}>
+            <BooksMenu
+              position={[0, 0, -2.5]}
+              scale={[0.1, 0.1, 0.1]}
+              responses={[
+                {
+                  id: "0",
+                  data: {
+                    line1: "Danny",
+                    line2: "Work",
+                    navPath: "/work",
+                  },
+                },
+                {
+                  id: "1",
+                  data: {
+                    line1: "Danny",
+                    line2: "Research",
+                    navPath: "https://arxiv.org/pdf/2410.12589v1",
+                  },
+                },
+                {
+                  id: "2",
+                  data: {
+                    line1: "Danny",
+                    line2: "Projects",
+                    navPath: "",
+                  },
+                },
+                {
+                  id: "3",
+                  data: {
+                    line1: "Danny",
+                    line2: "Theology",
+                    navPath: "",
+                  },
+                },
+                {
+                  id: "4",
+                  data: {
+                    line1: "Danny",
+                    line2: "Music",
+                    navPath: "",
+                  },
+                },
+                {
+                  id: "5",
+                  data: {
+                    line1: "Danny",
+                    line2: "Misc",
+                    navPath: "/misc",
+                  },
+                },
+                {
+                  id: "6",
+                  data: {
+                    line1: "Danny",
+                    line2: "Advocacy",
+                    // navPath: "/abolish",
+                  },
+                },
+                {
+                  id: "7",
+                  data: {
+                    line1: "Danny",
+                    line2: "Gallery",
+                    navPath: "/gallery",
+                  },
+                },
+              ]}
+              onStopLoadSound={() => {}}
+            />
             <Desk />
           </ScrollControls>
         </Suspense>
+        <Html>
+          <Box width="100vw" height="100vh">
+            <IntroductionOverlay />
+          </Box>
+        </Html>
       </Canvas>
       <Loader />
     </Box>

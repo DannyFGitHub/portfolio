@@ -1,5 +1,5 @@
 import { Box, Typography, useColorScheme } from "@mui/material";
-import BubbleVerseCanvas from "./BubbleVerseCanvas";
+// import BubbleVerseCanvas from "./BubbleVerseCanvas";
 import { FontSwitchingDannyVerse } from "./SwitchingAnimationFonts.tsx";
 import { ScrollIndicatorAnimated } from "./ScrollDownIndicator.tsx";
 import { Key, useEffect } from "react";
@@ -64,13 +64,11 @@ export function IntroductionOverlay() {
   return (
     <Box width="100%" height="100%">
       <Box
-        position="fixed"
         style={{
           width: "100%",
           top: 0,
           left: 0,
         }}
-        zIndex="1"
       >
         <Box
           width="100%"
@@ -90,7 +88,7 @@ export function IntroductionOverlay() {
         </Box>
       </Box>
 
-      <Box height="100%">
+      <Box height="100%" width="100%">
         <Box
           width="100%"
           height="100%"
@@ -156,77 +154,6 @@ export function IntroductionOverlay() {
             </Box>
           </Box>
         </Box>
-      </Box>
-      <Box height="100%">
-        <BubbleVerseCanvas
-          responses={[
-            {
-              id: "0",
-              data: {
-                line1: "Danny",
-                line2: "Work",
-                navPath: "/work",
-              },
-            },
-            {
-              id: "1",
-              data: {
-                line1: "Danny",
-                line2: "Research",
-                navPath: "https://arxiv.org/pdf/2410.12589v1",
-              },
-            },
-            {
-              id: "2",
-              data: {
-                line1: "Danny",
-                line2: "Projects",
-                navPath: "",
-              },
-            },
-            {
-              id: "3",
-              data: {
-                line1: "Danny",
-                line2: "Theology",
-                navPath: "",
-              },
-            },
-            {
-              id: "4",
-              data: {
-                line1: "Danny",
-                line2: "Music",
-                navPath: "",
-              },
-            },
-            {
-              id: "5",
-              data: {
-                line1: "Danny",
-                line2: "Misc",
-                navPath: "/misc",
-              },
-            },
-            {
-              id: "6",
-              data: {
-                line1: "Danny",
-                line2: "Advocacy",
-                // navPath: "/abolish",
-              },
-            },
-            {
-              id: "7",
-              data: {
-                line1: "Danny",
-                line2: "Gallery",
-                navPath: "/gallery",
-              },
-            },
-          ]}
-          onStopLoadSound={() => {}}
-        />
       </Box>
     </Box>
   );
