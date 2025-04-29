@@ -139,7 +139,7 @@ export function TableBookShelf(props: JSX.IntrinsicElements["group"]) {
             userData={{ name: "Paper.001" }}
           />
         </mesh> */}
-        <mesh
+        {/* <mesh
           name="RedBigBook"
           castShadow
           receiveShadow
@@ -178,8 +178,8 @@ export function TableBookShelf(props: JSX.IntrinsicElements["group"]) {
             material={materials.Paper}
             userData={{ name: "Paper.003" }}
           />
-        </mesh>
-        <mesh
+        </mesh> */}
+        {/* <mesh
           name="BlueLittleBook"
           castShadow
           receiveShadow
@@ -218,8 +218,8 @@ export function TableBookShelf(props: JSX.IntrinsicElements["group"]) {
             material={materials.Paper}
             userData={{ name: "Paper.005" }}
           />
-        </mesh>
-        <mesh
+        </mesh> */}
+        {/* <mesh
           name="RedBigBook001"
           castShadow
           receiveShadow
@@ -258,8 +258,8 @@ export function TableBookShelf(props: JSX.IntrinsicElements["group"]) {
             material={materials.Paper}
             userData={{ name: "Paper.008" }}
           />
-        </mesh>
-        <mesh
+        </mesh> */}
+        {/* <mesh
           name="RedBigBook002"
           castShadow
           receiveShadow
@@ -298,8 +298,8 @@ export function TableBookShelf(props: JSX.IntrinsicElements["group"]) {
             material={materials.Paper}
             userData={{ name: "Paper.010" }}
           />
-        </mesh>
-        <mesh
+        </mesh> */}
+        {/* <mesh
           name="RedBigBook003"
           castShadow
           receiveShadow
@@ -338,7 +338,7 @@ export function TableBookShelf(props: JSX.IntrinsicElements["group"]) {
             material={materials.Paper}
             userData={{ name: "Paper.012" }}
           />
-        </mesh>
+        </mesh> */}
       </group>
     </group>
   );

@@ -1,5 +1,5 @@
-import { Box, Typography, useColorScheme } from "@mui/material";
-// import BubbleVerseCanvas from "./BubbleVerseCanvas";
+import { Box, Paper, Typography, useColorScheme } from "@mui/material";
+
 import { FontSwitchingDannyVerse } from "./SwitchingAnimationFonts.tsx";
 import { ScrollIndicatorAnimated } from "./ScrollDownIndicator.tsx";
 import { Key, useEffect } from "react";
@@ -55,43 +55,12 @@ export function NameLetterSpread(props: { text: string }) {
 }
 
 export function IntroductionOverlay() {
-  const { setMode } = useColorScheme();
-
-  useEffect(() => {
-    setMode("dark");
-  }, []);
-
   return (
-    <Box width="100%" height="100%">
-      <Box
-        style={{
-          width: "100%",
-          top: 0,
-          left: 0,
-        }}
-      >
+    <Box minHeight="100vh" minWidth="100vw">
+      <Paper>
         <Box
           width="100%"
-          display="flex"
-          flexDirection="row"
-          justifyContent="space-between"
-          alignItems="space-between"
-          style={{ opacity: 0.2 }}
-        >
-          {fonts.map((fontName, index) => {
-            return (
-              <Typography key={index} variant="body1" fontFamily={fontName}>
-                {fontName}
-              </Typography>
-            );
-          })}
-        </Box>
-      </Box>
-
-      <Box height="100%" width="100%">
-        <Box
-          width="100%"
-          height="100%"
+          height="100vh"
           display="flex"
           flexDirection="column"
           justifyContent="center"
@@ -115,9 +84,16 @@ export function IntroductionOverlay() {
               width="100%"
             >
               <Typography
+                component="div"
                 width="100%"
                 align="justify"
-                variant="h1"
+                fontSize={{
+                  xs: "4ch",
+                  sm: "5ch",
+                  md: "8ch",
+                  lg: "11ch",
+                  xl: "14ch",
+                }}
                 fontFamily="sixty"
               >
                 <NameLetterSpread text={PORTFOLIO_NAME} />
@@ -147,14 +123,23 @@ export function IntroductionOverlay() {
                 align="center"
                 fontFamily="faculty"
               >
-                Explore the
+                Scroll to explore the
               </Typography>
               <FontSwitchingDannyVerse />
               <ScrollIndicatorAnimated />
             </Box>
           </Box>
         </Box>
-      </Box>
+      </Paper>
+      <Box
+        width="100%"
+        height="100vh"
+        display="flex"
+        flexDirection="column"
+        justifyContent="center"
+        alignItems="center"
+        p={2}
+      ></Box>
     </Box>
   );
 }

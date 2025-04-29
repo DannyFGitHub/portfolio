@@ -1,10 +1,11 @@
 import { useEffect, useRef } from "react";
 import { useGLTF, useAnimations } from "@react-three/drei";
 import FLogo3DURL from "../../../assets/models/flogo.glb";
-import { LoopRepeat } from "three";
+import { Group, LoopRepeat } from "three";
+import { useFrame } from "@react-three/fiber";
 
 export function FLogo3D(props) {
-  const group = useRef(null);
+  const group = useRef<Group>(null);
   const { nodes, materials, animations } = useGLTF(FLogo3DURL);
   const { actions, names, mixer } = useAnimations(animations, group);
 
@@ -14,6 +15,14 @@ export function FLogo3D(props) {
       actions[name]?.setLoop(LoopRepeat, 1).reset().play();
     }
   }, []);
+
+  useFrame((state, delta) => {
+    if (!group.current || !props.position) return;
+    const offset = Math.sin(state.clock.getElapsedTime() * 1) * 0.02;
+    group.current.position.y = props.position[1] + offset;
+
+    group.current.rotation.y += 0.005;
+  });
 
   return (
     <group ref={group} {...props} dispose={null}>
