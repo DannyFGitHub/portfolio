@@ -74,6 +74,8 @@ export function OpenBook(
             transparent
             opacity={1}
             side={2}
+            roughness={1}
+            metalness={0}
           />
           <group
             ref={bookHalfRef}
@@ -93,6 +95,8 @@ export function OpenBook(
                 transparent
                 opacity={1}
                 side={2}
+                roughness={1}
+                metalness={0}
               />
             </mesh>
             <mesh

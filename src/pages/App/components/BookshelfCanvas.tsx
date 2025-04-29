@@ -39,9 +39,27 @@ function Desk(props: ThreeElements["group"] & { disableScroll?: boolean }) {
       position={bookView ? [0, -1.2, -2.7] : [0, -1.24, -3]}
       rotation={[Math.PI * 0.07, Math.PI * 0, 0]}
     >
-      <directionalLight position={[0, 2, 3]} intensity={0.5} />
-      <directionalLight position={[1, 2, 3]} intensity={0.6} />
-      <BakeShadows />
+      <directionalLight
+        position={[2, 2, 2.3]}
+        shadow-mapSize-height={1024}
+        shadow-mapSize-width={1024}
+        shadow-camera-left={-10}
+        shadow-camera-right={10}
+        shadow-camera-top={10}
+        shadow-camera-bottom={-10}
+        castShadow
+      />
+      <directionalLight
+        position={[1, 1.8, 4]}
+        shadow-mapSize-height={1024}
+        shadow-mapSize-width={1024}
+        shadow-camera-left={-10}
+        shadow-camera-right={10}
+        shadow-camera-top={10}
+        shadow-camera-bottom={-10}
+        castShadow
+      />
+      <SoftShadows />
       <Bookshelf position={[0, 0, 0]} />
       <BooksMenu
         onZoomInOnBook={() => {
@@ -129,9 +147,9 @@ function Desk(props: ThreeElements["group"] & { disableScroll?: boolean }) {
 function Floor(props: ThreeElements["mesh"]) {
   const meshRef = useRef<Mesh>(null!);
   return (
-    <mesh {...props} ref={meshRef} receiveShadow>
+    <mesh {...props} ref={meshRef} castShadow receiveShadow>
       <cylinderGeometry args={[4.5, 4.5, 0.1, 32]} />
-      <meshStandardMaterial color={"white"} metalness={0} roughness={1} />
+      <meshStandardMaterial color={"grey"} metalness={0} roughness={1} />
     </mesh>
   );
 }
@@ -161,8 +179,7 @@ export function BookshelfCanvas(props) {
           height: "100%",
           width: "100%",
         }}
-        camera={{ position: [0, 0, 0], fov: 30 }}
-        shadows
+        camera={{ position: [0, 0, 0], fov: 35 }}
       >
         <Suspense fallback={null}>
           <ScrollControls pages={2} damping={0.25}>

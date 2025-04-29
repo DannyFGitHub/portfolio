@@ -65,7 +65,13 @@ export function TableBookShelf(props: JSX.IntrinsicElements["group"]) {
           material={materials.WoodTable}
           position={[0, 0, -0.075]}
           userData={{ name: "Table" }}
-        />
+        >
+          <meshStandardMaterial
+            color={materials.WoodTable.color}
+            roughness={0.3}
+            metalness={0}
+          />
+        </mesh>
         <mesh
           name="Shelf"
           castShadow
@@ -75,7 +81,13 @@ export function TableBookShelf(props: JSX.IntrinsicElements["group"]) {
           position={[0, 0, -0.075]}
           scale={0.862}
           userData={{ name: "Shelf" }}
-        />
+        >
+          <meshStandardMaterial
+            color={materials.BookshelfWood.color}
+            roughness={0.3}
+            metalness={0}
+          />
+        </mesh>
         <mesh
           name="Mat"
           castShadow
@@ -85,24 +97,28 @@ export function TableBookShelf(props: JSX.IntrinsicElements["group"]) {
           position={[0, 0, -0.075]}
           userData={{ name: "Mat" }}
         />
-        <mesh
-          name="CoffeeMug"
-          castShadow
-          receiveShadow
-          geometry={nodes.CoffeeMug.geometry}
-          material={materials.Cup}
-          position={[-0.471, 1.002, 0.265]}
-          userData={{ name: "CoffeeMug" }}
-        >
+        <group>
           <mesh
-            name="Circle"
+            name="CoffeeMug"
             castShadow
             receiveShadow
-            geometry={nodes.Circle.geometry}
-            material={materials.Coffee}
-            userData={{ name: "Circle" }}
-          />
-        </mesh>
+            geometry={nodes.CoffeeMug.geometry}
+            material={materials.Cup}
+            position={[-0.471, 1.002, 0.265]}
+            scale={[1.5, 1.5, 1.5]}
+            userData={{ name: "CoffeeMug" }}
+          >
+            <mesh
+              name="Circle"
+              castShadow
+              receiveShadow
+              geometry={nodes.Circle.geometry}
+              material={materials.Coffee}
+              userData={{ name: "Circle" }}
+              scale={[1, 1.2, 1]}
+            />
+          </mesh>
+        </group>
         {/* <mesh
           name="Book"
           castShadow
