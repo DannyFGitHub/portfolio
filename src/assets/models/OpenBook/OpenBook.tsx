@@ -63,12 +63,18 @@ export function OpenBook(
           castShadow
           receiveShadow
           geometry={nodes.Book.geometry}
-          material={materials.RedBookCover}
+          // material={materials.RedBookCover}
           position={[0, 0, 0]}
           rotation={[0, 0, 0]}
           scale={[1.611, 1.611, 1.611]}
           userData={{ name: "Book" }}
         >
+          <meshStandardMaterial
+            color={props.color}
+            transparent
+            opacity={1}
+            side={2}
+          />
           <group
             ref={bookHalfRef}
             rotation={[0, 0, -Math.PI]}
@@ -79,9 +85,16 @@ export function OpenBook(
               castShadow
               receiveShadow
               geometry={nodes.BookHalf.geometry}
-              material={materials.RedBookCover}
+              // material={materials.RedBookCover}
               userData={{ name: "BookHalf" }}
-            />
+            >
+              <meshStandardMaterial
+                color={props.color}
+                transparent
+                opacity={1}
+                side={2}
+              />
+            </mesh>
             <mesh
               name="Paper"
               castShadow
