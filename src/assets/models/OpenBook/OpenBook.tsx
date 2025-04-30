@@ -57,7 +57,7 @@ export function OpenBook(
 
   return (
     <group {...props} dispose={null}>
-      <group name="Scene">
+      <group name="BookScene">
         <mesh
           name="Book"
           castShadow

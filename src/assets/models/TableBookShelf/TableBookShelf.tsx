@@ -56,7 +56,7 @@ export function TableBookShelf(props: JSX.IntrinsicElements["group"]) {
   const { nodes, materials } = useGLTF(TableBookShelfUrl) as GLTFResult;
   return (
     <group {...props} dispose={null}>
-      <group name="Scene">
+      <group name="DeskScene">
         <mesh
           name="Table"
           castShadow
@@ -66,11 +66,7 @@ export function TableBookShelf(props: JSX.IntrinsicElements["group"]) {
           position={[0, 0, -0.075]}
           userData={{ name: "Table" }}
         >
-          <meshStandardMaterial
-            color={materials.WoodTable.color}
-            roughness={0.3}
-            metalness={0}
-          />
+          <meshStandardMaterial color={"#63462D"} roughness={1} metalness={0} />
         </mesh>
         <mesh
           name="Shelf"
@@ -82,11 +78,7 @@ export function TableBookShelf(props: JSX.IntrinsicElements["group"]) {
           scale={0.862}
           userData={{ name: "Shelf" }}
         >
-          <meshStandardMaterial
-            color={materials.BookshelfWood.color}
-            roughness={0.3}
-            metalness={0}
-          />
+          <meshStandardMaterial color={"#63462D"} roughness={1} metalness={0} />
         </mesh>
         <mesh
           name="Mat"
@@ -119,242 +111,6 @@ export function TableBookShelf(props: JSX.IntrinsicElements["group"]) {
             />
           </mesh>
         </group>
-        {/* <mesh
-          name="Book"
-          castShadow
-          receiveShadow
-          geometry={nodes.Book.geometry}
-          material={materials.RedBookCover}
-          position={[0, 1.481, 0.618]}
-          rotation={[0.621, 0, 0]}
-          scale={1.611}
-          userData={{ name: "Book" }}
-        >
-          <mesh
-            name="BookHalf"
-            castShadow
-            receiveShadow
-            geometry={nodes.BookHalf.geometry}
-            material={materials.RedBookCover}
-            userData={{ name: "BookHalf" }}
-          />
-          <mesh
-            name="Paper"
-            castShadow
-            receiveShadow
-            geometry={nodes.Paper.geometry}
-            material={materials.Paper}
-            userData={{ name: "Paper" }}
-          />
-          <mesh
-            name="Paper001"
-            castShadow
-            receiveShadow
-            geometry={nodes.Paper001.geometry}
-            material={materials.Paper}
-            userData={{ name: "Paper.001" }}
-          />
-        </mesh> */}
-        {/* <mesh
-          name="RedBigBook"
-          castShadow
-          receiveShadow
-          geometry={nodes.RedBigBook.geometry}
-          material={materials.RedBookCover}
-          position={[-0.618, 1.203, -0.411]}
-          rotation={[Math.PI / 2, 0, -Math.PI / 2]}
-          scale={[1.586, 2.987, 1.586]}
-          userData={{ name: "RedBigBook" }}
-        >
-          <mesh
-            name="BookHalf001"
-            castShadow
-            receiveShadow
-            geometry={nodes.BookHalf001.geometry}
-            material={materials.RedBookCover}
-            position={[0, 0.015, 0]}
-            rotation={[0, 0, Math.PI]}
-            userData={{ name: "BookHalf.001" }}
-          />
-          <mesh
-            name="Paper002"
-            castShadow
-            receiveShadow
-            geometry={nodes.Paper002.geometry}
-            material={materials.Paper}
-            position={[0, 0.015, 0]}
-            rotation={[0, 0, Math.PI]}
-            userData={{ name: "Paper.002" }}
-          />
-          <mesh
-            name="Paper003"
-            castShadow
-            receiveShadow
-            geometry={nodes.Paper003.geometry}
-            material={materials.Paper}
-            userData={{ name: "Paper.003" }}
-          />
-        </mesh> */}
-        {/* <mesh
-          name="BlueLittleBook"
-          castShadow
-          receiveShadow
-          geometry={nodes.BlueLittleBook.geometry}
-          material={materials.BlueBookCover}
-          position={[0.446, 1.178, -0.411]}
-          rotation={[Math.PI / 2, -0.191, -Math.PI / 2]}
-          scale={[1.352, 2.548, 1.352]}
-          userData={{ name: "BlueLittleBook" }}
-        >
-          <mesh
-            name="BookHalf002"
-            castShadow
-            receiveShadow
-            geometry={nodes.BookHalf002.geometry}
-            material={materials.BlueBookCover}
-            position={[0, 0.015, 0]}
-            rotation={[0, 0, Math.PI]}
-            userData={{ name: "BookHalf.002" }}
-          />
-          <mesh
-            name="Paper004"
-            castShadow
-            receiveShadow
-            geometry={nodes.Paper004.geometry}
-            material={materials.Paper}
-            position={[0, 0.015, 0]}
-            rotation={[0, 0, Math.PI]}
-            userData={{ name: "Paper.004" }}
-          />
-          <mesh
-            name="Paper005"
-            castShadow
-            receiveShadow
-            geometry={nodes.Paper005.geometry}
-            material={materials.Paper}
-            userData={{ name: "Paper.005" }}
-          />
-        </mesh> */}
-        {/* <mesh
-          name="RedBigBook001"
-          castShadow
-          receiveShadow
-          geometry={nodes.RedBigBook001.geometry}
-          material={materials.RedBookCover}
-          position={[0.516, 1.183, -0.411]}
-          rotation={[Math.PI / 2, 0, -Math.PI / 2]}
-          scale={[1.403, 2.643, 1.403]}
-          userData={{ name: "RedBigBook.001" }}
-        >
-          <mesh
-            name="BookHalf003"
-            castShadow
-            receiveShadow
-            geometry={nodes.BookHalf003.geometry}
-            material={materials.RedBookCover}
-            position={[0, 0.015, 0]}
-            rotation={[0, 0, Math.PI]}
-            userData={{ name: "BookHalf.003" }}
-          />
-          <mesh
-            name="Paper007"
-            castShadow
-            receiveShadow
-            geometry={nodes.Paper007.geometry}
-            material={materials.Paper}
-            position={[0, 0.015, 0]}
-            rotation={[0, 0, Math.PI]}
-            userData={{ name: "Paper.007" }}
-          />
-          <mesh
-            name="Paper008"
-            castShadow
-            receiveShadow
-            geometry={nodes.Paper008.geometry}
-            material={materials.Paper}
-            userData={{ name: "Paper.008" }}
-          />
-        </mesh> */}
-        {/* <mesh
-          name="RedBigBook002"
-          castShadow
-          receiveShadow
-          geometry={nodes.RedBigBook002.geometry}
-          material={materials.RedBookCover}
-          position={[-0.495, 1.183, -0.411]}
-          rotation={[Math.PI / 2, 0, -Math.PI / 2]}
-          scale={[1.403, 2.643, 1.403]}
-          userData={{ name: "RedBigBook.002" }}
-        >
-          <mesh
-            name="BookHalf004"
-            castShadow
-            receiveShadow
-            geometry={nodes.BookHalf004.geometry}
-            material={materials.RedBookCover}
-            position={[0, 0.015, 0]}
-            rotation={[0, 0, Math.PI]}
-            userData={{ name: "BookHalf.004" }}
-          />
-          <mesh
-            name="Paper009"
-            castShadow
-            receiveShadow
-            geometry={nodes.Paper009.geometry}
-            material={materials.Paper}
-            position={[0, 0.015, 0]}
-            rotation={[0, 0, Math.PI]}
-            userData={{ name: "Paper.009" }}
-          />
-          <mesh
-            name="Paper010"
-            castShadow
-            receiveShadow
-            geometry={nodes.Paper010.geometry}
-            material={materials.Paper}
-            userData={{ name: "Paper.010" }}
-          />
-        </mesh> */}
-        {/* <mesh
-          name="RedBigBook003"
-          castShadow
-          receiveShadow
-          geometry={nodes.RedBigBook003.geometry}
-          material={materials.RedBookCover}
-          position={[-0.556, 1.183, -0.411]}
-          rotation={[Math.PI / 2, 0, -Math.PI / 2]}
-          scale={[1.403, 2.643, 1.403]}
-          userData={{ name: "RedBigBook.003" }}
-        >
-          <mesh
-            name="BookHalf005"
-            castShadow
-            receiveShadow
-            geometry={nodes.BookHalf005.geometry}
-            material={materials.RedBookCover}
-            position={[0, 0.015, 0]}
-            rotation={[0, 0, Math.PI]}
-            userData={{ name: "BookHalf.005" }}
-          />
-          <mesh
-            name="Paper011"
-            castShadow
-            receiveShadow
-            geometry={nodes.Paper011.geometry}
-            material={materials.Paper}
-            position={[0, 0.015, 0]}
-            rotation={[0, 0, Math.PI]}
-            userData={{ name: "Paper.011" }}
-          />
-          <mesh
-            name="Paper012"
-            castShadow
-            receiveShadow
-            geometry={nodes.Paper012.geometry}
-            material={materials.Paper}
-            userData={{ name: "Paper.012" }}
-          />
-        </mesh> */}
       </group>
     </group>
   );

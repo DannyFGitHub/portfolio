@@ -15,16 +15,16 @@ import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 
 const colors = [
-  "#D32F2F",
-  "#00BCD4",
-  "#FF5722",
-  "#795548",
-  "#303F9F",
-  "#388E3C",
-  "#FBC02D",
-  "#7B1FA2",
-  "#FFA000",
-  "#607D8B",
+  "#1a1a2e",
+  "#713017",
+  "#826d49",
+  "#8f896d",
+  "#855600",
+  "#854519",
+  "#853332",
+  "#426052",
+  "#482a4a",
+  "#024a4a",
 ];
 
 export interface MenuItemDetails {
@@ -284,7 +284,7 @@ function BookMenuItem(
           font={BrunoFont}
         >
           {menuItemDetails.data.line1}
-          <meshStandardMaterial color="#ffffff" />
+          <meshStandardMaterial color="#bab6a1" />
         </Text3D>
 
         <Text3D
@@ -301,7 +301,7 @@ function BookMenuItem(
           font={MegrimFont}
         >
           {menuItemDetails.data.line2}
-          <meshStandardMaterial color="#ffffff" />
+          <meshStandardMaterial color="#bab6a1" />
         </Text3D>
       </group>
     </group>

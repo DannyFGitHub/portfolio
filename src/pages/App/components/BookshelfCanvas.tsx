@@ -10,6 +10,7 @@ import {
   Scroll,
   SoftShadows,
   Bounds,
+  Stage,
 } from "@react-three/drei";
 import Box from "@mui/material/Box";
 
@@ -27,7 +28,7 @@ function Desk(props: ThreeElements["group"] & { disableScroll?: boolean }) {
   let scroll = useScroll();
   useFrame((state, delta) => {
     if (props?.disableScroll !== true) {
-      ref.current.rotation.y = -scroll.offset * (Math.PI * 0.25) + 0.4; // Rotate contents
+      ref.current.rotation.y = -scroll.offset * (Math.PI * 0.2) + 0.4; // Rotate contents
     }
 
     state.events.update(); // Raycasts every frame rather than on pointer-move
@@ -39,31 +40,10 @@ function Desk(props: ThreeElements["group"] & { disableScroll?: boolean }) {
       position={[0, -1.2, -2.7]}
       rotation={[Math.PI * 0.09, 0, 0]}
     >
-      <directionalLight
-        position={[2, 3, 2.3]}
-        shadow-mapSize-height={1024}
-        shadow-mapSize-width={1024}
-        shadow-camera-left={-10}
-        shadow-camera-right={10}
-        shadow-camera-top={10}
-        shadow-camera-bottom={-10}
-        castShadow
-      />
-      <directionalLight
-        position={[1, 1.8, 4]}
-        shadow-mapSize-height={1024}
-        shadow-mapSize-width={1024}
-        shadow-camera-left={-10}
-        shadow-camera-right={10}
-        shadow-camera-top={10}
-        shadow-camera-bottom={-10}
-        castShadow
-      />
-      <SoftShadows />
-
-      <Bookshelf position={[0, 0, 0]} />
+      <Bookshelf name="desk" position={[0, 0, 0]} />
       <Bounds fit clip observe margin={1.5}>
         <BooksMenu
+          name="booksMenu"
           onZoomInOnBook={() => {
             setBookView(true);
           }}
@@ -151,9 +131,9 @@ function Desk(props: ThreeElements["group"] & { disableScroll?: boolean }) {
 function Floor(props: ThreeElements["mesh"]) {
   const meshRef = useRef<Mesh>(null!);
   return (
-    <mesh {...props} ref={meshRef} castShadow receiveShadow>
+    <mesh {...props} ref={meshRef} receiveShadow>
       <cylinderGeometry args={[4.5, 4.5, 0.1, 32]} />
-      <meshStandardMaterial color={"grey"} metalness={0} roughness={1} />
+      <meshStandardMaterial color={"#382F2A"} metalness={0} roughness={1} />
     </mesh>
   );
 }
@@ -183,18 +163,28 @@ export function BookshelfCanvas(props) {
           height: "100%",
           width: "100%",
           display: "block",
+          background: "black",
         }}
-        camera={{ position: [0, 0, 0], fov: 45 }}
+        camera={{ position: [0, 0, 0], fov: 30 }}
+        shadows
       >
-        <Suspense fallback={null}>
-          <ScrollControls pages={2} damping={0.25} makeDefault>
-            <Desk />
-
-            <Scroll html>
-              <IntroductionOverlay />
-            </Scroll>
-          </ScrollControls>
-        </Suspense>
+        <Stage
+          preset="soft"
+          environment="apartment"
+          intensity={1}
+          center={{ disable: true }}
+          adjustCamera={false}
+          shadows="accumulative"
+        >
+          <Suspense fallback={null}>
+            <ScrollControls pages={2} damping={0.25}>
+              <Desk />
+              <Scroll html>
+                <IntroductionOverlay />
+              </Scroll>
+            </ScrollControls>
+          </Suspense>
+        </Stage>
       </Canvas>
       <Loader />
     </Box>
