@@ -1,6 +1,6 @@
-import { Canvas, ThreeElements, useFrame } from "@react-three/fiber";
-import { Suspense, useRef, useState } from "react";
-import { Group, Mesh } from "three";
+import { Canvas, ThreeElements, useFrame, useThree } from "@react-three/fiber";
+import { Suspense, useRef, useState, useEffect } from "react";
+import { Box3, Group, Mesh, Vector3 } from "three";
 
 import { TableBookShelf } from "../../../assets/models/TableBookShelf/TableBookShelf";
 import {
@@ -9,7 +9,7 @@ import {
   useScroll,
   Scroll,
   SoftShadows,
-  BakeShadows,
+  Bounds,
 } from "@react-three/drei";
 import Box from "@mui/material/Box";
 
@@ -36,11 +36,11 @@ function Desk(props: ThreeElements["group"] & { disableScroll?: boolean }) {
   return (
     <group
       ref={ref}
-      position={bookView ? [0, -1.2, -2.7] : [0, -1.24, -3]}
-      rotation={[Math.PI * 0.07, Math.PI * 0, 0]}
+      position={[0, -1.2, -2.7]}
+      rotation={[Math.PI * 0.09, 0, 0]}
     >
       <directionalLight
-        position={[2, 2, 2.3]}
+        position={[2, 3, 2.3]}
         shadow-mapSize-height={1024}
         shadow-mapSize-width={1024}
         shadow-camera-left={-10}
@@ -60,85 +60,89 @@ function Desk(props: ThreeElements["group"] & { disableScroll?: boolean }) {
         castShadow
       />
       <SoftShadows />
+
       <Bookshelf position={[0, 0, 0]} />
-      <BooksMenu
-        onZoomInOnBook={() => {
-          setBookView(true);
-        }}
-        position={[0, 1.48, 0]}
-        scale={[0.35, 0.35, 0.35]}
-        responses={[
-          {
-            id: "0",
-            data: {
-              line1: "Danny",
-              line2: "Work",
-              navPath: "/work",
+      <Bounds fit clip observe margin={1.5}>
+        <BooksMenu
+          onZoomInOnBook={() => {
+            setBookView(true);
+          }}
+          position={[0, 1.48, 0]}
+          scale={[0.35, 0.35, 0.35]}
+          responses={[
+            {
+              id: "0",
+              data: {
+                line1: "Danny",
+                line2: "Work",
+                navPath: "/work",
+              },
             },
-          },
-          {
-            id: "1",
-            data: {
-              line1: "Danny",
-              line2: "Research",
-              navPath: "https://arxiv.org/pdf/2410.12589v1",
+            {
+              id: "1",
+              data: {
+                line1: "Danny",
+                line2: "Research",
+                navPath: "https://arxiv.org/pdf/2410.12589v1",
+              },
             },
-          },
-          {
-            id: "2",
-            data: {
-              line1: "Danny",
-              line2: "Projects",
-              navPath: "",
+            {
+              id: "2",
+              data: {
+                line1: "Danny",
+                line2: "Projects",
+                navPath: "",
+              },
             },
-          },
-          {
-            id: "3",
-            data: {
-              line1: "Danny",
-              line2: "Theology",
-              navPath: "",
+            {
+              id: "3",
+              data: {
+                line1: "Danny",
+                line2: "Theology",
+                navPath: "",
+              },
             },
-          },
-          {
-            id: "4",
-            data: {
-              line1: "Danny",
-              line2: "Music",
-              navPath: "",
+            {
+              id: "4",
+              data: {
+                line1: "Danny",
+                line2: "Music",
+                navPath: "",
+              },
             },
-          },
-          {
-            id: "5",
-            data: {
-              line1: "Danny",
-              line2: "Misc",
-              navPath: "/misc",
+            {
+              id: "5",
+              data: {
+                line1: "Danny",
+                line2: "Misc",
+                navPath: "/misc",
+              },
             },
-          },
-          {
-            id: "6",
-            data: {
-              line1: "Danny",
-              line2: "Advocacy",
-              // navPath: "/abolish",
+            {
+              id: "6",
+              data: {
+                line1: "Danny",
+                line2: "Advocacy",
+                // navPath: "/abolish",
+              },
             },
-          },
-          {
-            id: "7",
-            data: {
-              line1: "Danny",
-              line2: "Gallery",
-              navPath: "/gallery",
+            {
+              id: "7",
+              data: {
+                line1: "Danny",
+                line2: "Gallery",
+                navPath: "/gallery",
+              },
             },
-          },
-        ]}
-      />
+          ]}
+        />
+      </Bounds>
       <FLogo3D
         rotation={[0, Math.PI * -0.5, 0]}
         position={[0.5, 1.05, 0.3]}
         scale={[0.03, 0.03, 0.03]}
       />
+
       <Floor position={[0, 0, 0]} />
     </group>
   );
@@ -178,12 +182,14 @@ export function BookshelfCanvas(props) {
         style={{
           height: "100%",
           width: "100%",
+          display: "block",
         }}
-        camera={{ position: [0, 0, 0], fov: 35 }}
+        camera={{ position: [0, 0, 0], fov: 45 }}
       >
         <Suspense fallback={null}>
-          <ScrollControls pages={2} damping={0.25}>
+          <ScrollControls pages={2} damping={0.25} makeDefault>
             <Desk />
+
             <Scroll html>
               <IntroductionOverlay />
             </Scroll>

@@ -314,35 +314,35 @@ const BookOnTable = {
 };
 const BookOnShelf = [
   {
-    position: [1.2, -0.9, -0.4],
+    position: [1.2, -0.98, -0.4],
     rotation: [0, Math.PI * 0.3, Math.PI * 0.0],
   },
   {
-    position: [0.8, -0.9, -0.4],
+    position: [0.75, -0.98, -0.4],
     rotation: [0, Math.PI * 0.3, Math.PI * 0.0],
   },
   {
-    position: [0.4, -0.9, -0.4],
+    position: [0.35, -0.98, -0.4],
     rotation: [0, Math.PI * 0.3, Math.PI * 0.0],
   },
   {
-    position: [0, -0.9, -0.4],
+    position: [-0.1, -0.98, -0.4],
     rotation: [0, Math.PI * 0.3, Math.PI * 0.0],
   },
   {
-    position: [-0.4, -0.9, -0.4],
+    position: [-0.5, -0.98, -0.4],
     rotation: [0, Math.PI * 0.3, Math.PI * 0.0],
   },
   {
-    position: [-0.8, -0.9, -0.4],
+    position: [-0.9, -0.98, -0.4],
     rotation: [0, Math.PI * 0.3, Math.PI * 0.0],
   },
   {
-    position: [-1.2, -0.9, -0.4],
+    position: [-1.35, -0.98, -0.4],
     rotation: [0, Math.PI * 0.3, Math.PI * 0.0],
   },
   {
-    position: [-1.6, -0.9, -0.4],
+    position: [-1.75, -0.98, -0.4],
     rotation: [0, Math.PI * 0.3, Math.PI * 0.0],
   },
 ];
