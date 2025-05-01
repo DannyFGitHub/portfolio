@@ -119,7 +119,7 @@ function Desk(props: ThreeElements["group"] & { disableScroll?: boolean }) {
       </Bounds>
       <FLogo3D
         rotation={[0, Math.PI * -0.5, 0]}
-        position={[0.5, 1.05, 0.3]}
+        position={[0.5, 1, 0.3]}
         scale={[0.03, 0.03, 0.03]}
       />
 
@@ -166,7 +166,6 @@ export function BookshelfCanvas(props) {
           background: "black",
         }}
         camera={{ position: [0, 0, 0], fov: 30 }}
-        shadows
       >
         <Stage
           preset="soft"
@@ -174,7 +173,6 @@ export function BookshelfCanvas(props) {
           intensity={1}
           center={{ disable: true }}
           adjustCamera={false}
-          shadows="accumulative"
         >
           <Suspense fallback={null}>
             <ScrollControls pages={2} damping={0.25}>

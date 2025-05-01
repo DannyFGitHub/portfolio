@@ -95,11 +95,18 @@ export function TableBookShelf(props: JSX.IntrinsicElements["group"]) {
             castShadow
             receiveShadow
             geometry={nodes.CoffeeMug.geometry}
-            material={materials.Cup}
+            // material={materials.Cup}
             position={[-0.471, 1.002, 0.265]}
             scale={[1.5, 1.5, 1.5]}
             userData={{ name: "CoffeeMug" }}
           >
+            <meshStandardMaterial
+              color={materials.Cup.color}
+              metalness={0.3}
+              roughness={0.2}
+              side={2}
+            />
+
             <mesh
               name="Circle"
               castShadow
@@ -107,8 +114,8 @@ export function TableBookShelf(props: JSX.IntrinsicElements["group"]) {
               geometry={nodes.Circle.geometry}
               material={materials.Coffee}
               userData={{ name: "Circle" }}
-              scale={[1, 1.2, 1]}
-            />
+              scale={[0.95, 1.2, 0.95]}
+            ></mesh>
           </mesh>
         </group>
       </group>

@@ -6,12 +6,11 @@ import {
   Scroll,
   useScroll,
   Loader,
-  Clouds,
-  Cloud,
   Environment,
-  AccumulativeShadows,
-  RandomizedLight,
   Center,
+  Stats,
+  Html,
+  Bounds,
 } from "@react-three/drei";
 import { Color } from "three/webgpu";
 import cemshirtUrl from "../../../assets/models/cemshirt.glb";
@@ -20,19 +19,18 @@ import iptechshirtUrl from "../../../assets/models/iptechshirt.glb";
 import styled from "styled-components";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import { ThemeProvider } from "@mui/material";
-import { theme } from "../../../themes/MainTheme";
 
-import { Group } from "three";
-import { useColorScheme } from "@mui/material";
-import { easing } from "maath";
+import { Group, Mesh } from "three";
+import { ThemeProvider, useColorScheme } from "@mui/material";
+import { theme } from "../../../themes/MainTheme";
 
 export function MousePerspectiveRig(props) {
   const ref = useRef<Group>(null!);
   let scroll = useScroll();
   useFrame((state, delta) => {
     if (props?.disableScroll !== true) {
-      ref.current.rotation.y = -scroll.offset * (Math.PI * 1.33) + 0.4; // Rotate contents
+      ref.current.rotation.y =
+        -scroll.offset * (Math.PI * 1.33) + Math.PI * 1.35; // Rotate contents
     }
 
     state.events.update(); // Raycasts every frame rather than on pointer-move
@@ -48,91 +46,56 @@ function Page({
   jobRoles,
 }) {
   return (
-    <Box
-      display="flex"
-      p={2}
-      width="100%"
-      height="100vh"
-      position="relative"
-      style={{
-        top: 0,
-        left: 0,
-      }}
-    >
-      <Box
-        display="flex"
-        width="100%"
-        height="100%"
-        justifyContent="center"
-        alignItems="end"
-        flexDirection={"row"}
-      >
-        <Box
-          flex={1}
-          width="100%"
-          style={{
-            color: "black",
-            opacity: 0.9,
-            background: "white",
-            borderRadius: "50px",
-          }}
-          p={{ sm: 2, md: 4 }}
-        >
-          <Box p={2} display="relative" width="100%">
-            <Typography fontFamily="shrik" variant="h2">
-              {businessName}
-            </Typography>
-          </Box>
+    <Box p={1}>
+      <Box p={{ sm: 1, md: 2 }}>
+        <Box p={1}>
+          <Typography fontFamily="shrik" variant="h2">
+            {businessName}
+          </Typography>
+        </Box>
 
-          <Box
-            p={2}
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            flexDirection="column"
-          >
-            <Typography fontFamily="jersey" variant="body2">
-              {businessDescription}
-            </Typography>
-          </Box>
-          <Box
-            display="flex"
-            alignItems="center"
-            alignContent="center"
-            flexDirection="column"
-          >
-            <hr style={{ width: "50%" }} />
-          </Box>
-          <Box
-            p={2}
-            m={1}
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            flexDirection="column"
-          >
-            <Typography fontFamily="faculty" variant="body1">
-              {jobDescription}
-            </Typography>
-          </Box>
-          <Box
-            p={2}
-            display="flex"
-            justifyContent="center"
-            alignItems="right"
-            flexDirection="column"
-          >
-            <Typography variant="caption" fontFamily="faculty" align="right">
-              {jobRoles}
-            </Typography>
-          </Box>
+        <Box
+          p={1}
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          flexDirection="column"
+        >
+          <Typography fontFamily="jersey" variant="body2">
+            {businessDescription}
+          </Typography>
         </Box>
         <Box
-          flex={{ lg: 1, xl: 3 }}
-          sx={{
-            display: { xs: "none", sm: "none", lg: "flex" },
-          }}
-        ></Box>
+          display="flex"
+          alignItems="center"
+          alignContent="center"
+          flexDirection="column"
+        >
+          <hr style={{ width: "50%" }} />
+        </Box>
+        <Box
+          p={2}
+          m={1}
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          flexDirection="column"
+        >
+          <Typography fontFamily="faculty" variant="body1">
+            {jobDescription}
+          </Typography>
+        </Box>
+        <Box
+          p={2}
+          display="flex"
+          justifyContent="center"
+          alignItems="right"
+          flexDirection="column"
+        >
+          <Typography variant="caption" fontFamily="faculty" align="right">
+            {jobRoles}
+          </Typography>
+        </Box>
       </Box>
     </Box>
   );
@@ -146,51 +109,11 @@ function TempLink({ loc, disp }: { loc: string; disp: string }) {
   );
 }
 
-function Backdrop() {
-  const shadows = useRef(null);
-  useFrame((state, delta) =>
-    easing.dampC(
-      shadows.current.getMesh().material.color,
-      state.color,
-      0.25,
-      delta
-    )
-  );
-  return (
-    <AccumulativeShadows
-      ref={shadows}
-      temporal
-      frames={60}
-      alphaTest={0.85}
-      scale={5}
-      resolution={2048}
-      rotation={[Math.PI / 2, 0, 0]}
-      position={[0, 0, -0.14]}
-    >
-      <RandomizedLight
-        amount={4}
-        radius={9}
-        intensity={0.55 * Math.PI}
-        ambient={0.25}
-        position={[5, 5, -10]}
-      />
-      <RandomizedLight
-        amount={4}
-        radius={5}
-        intensity={0.25 * Math.PI}
-        ambient={0.55}
-        position={[-5, 5, -9]}
-      />
-    </AccumulativeShadows>
-  );
-}
-
 const Scene = () => {
   const cemshirtRef = useRef();
   const appleshirtRef = useRef();
   const iptechshirtRef = useRef();
-
-  const shirtsGroupRef = useRef();
+  const baseRef = useRef();
 
   const { scene, viewport } = useThree();
   const { mode, setMode } = useColorScheme();
@@ -199,6 +122,8 @@ const Scene = () => {
   const appleshirt = useLoader(GLTFLoader, appleshirtUrl);
   const iptechshirt = useLoader(GLTFLoader, iptechshirtUrl);
 
+  const [pageNum, setPageNum] = useState<number>(0);
+
   const shirts = [
     { ref: iptechshirtRef, model: iptechshirt },
     { ref: cemshirtRef, model: cemshirt },
@@ -206,7 +131,7 @@ const Scene = () => {
   ];
   const [shirtWithLoc] = useState(
     shirts.map((item, index: number): { ref; model; loc } => {
-      const radius = 1;
+      const radius = 0.65;
       return {
         ...item,
         loc: [
@@ -218,7 +143,16 @@ const Scene = () => {
     })
   );
 
-  useFrame(() => {
+  useFrame((state, delta) => {
+    const offset1 = Math.sin(state.clock.getElapsedTime() * 1) * 0.018;
+    cemshirtRef.current.position.y = offset1 - 0.2;
+
+    const offset2 = Math.sin(state.clock.getElapsedTime() * 1.1) * 0.018;
+    appleshirtRef.current.position.y = offset2 - 0.2;
+
+    const offset3 = Math.sin(state.clock.getElapsedTime() * 0.9) * 0.018;
+    iptechshirtRef.current.position.y = offset3 - 0.2;
+
     cemshirtRef.current.rotation.y += 0.005;
     appleshirtRef.current.rotation.y += 0.005;
     iptechshirtRef.current.rotation.y += 0.005;
@@ -230,165 +164,310 @@ const Scene = () => {
 
   return (
     <>
-      {/* <group position={[0, 0, -5]}>
-        <Clouds material={MeshBasicMaterial}>
-          <Cloud
-            seed={1}
-            scale={1}
-            volume={5}
-            color={mode === "dark" ? "hotpink" : "black"}
-            fade={200}
-          />
-        </Clouds>
-      </group> */}
-      <group position={[0, 0, 0]}>
-        <Backdrop />
-      </group>
-      <ScrollControls pages={3} damping={0.25}>
-        <Scroll>
-          <MousePerspectiveRig position={[0, 0.16, 0]}>
-            <group rotation={[0, Math.PI * 0.2, 0]}>
-              {shirtWithLoc.map((shirt, index) => {
-                return (
+      <ScrollControls pages={3} damping={0.25} horizontal>
+        <MousePerspectiveRig
+          position={[0, 0.2, -3]}
+          // rotation={[Math.PI * 0.05, 0, 0]}
+        >
+          <group>
+            {shirtWithLoc.map((shirt, index) => {
+              return (
+                <group key={index}>
+                  <spotLight
+                    target={shirt.ref.current}
+                    position={[
+                      shirt.loc[0] - 0.04,
+                      shirt.loc[1] + 0.46,
+                      shirt.loc[2],
+                    ]}
+                    color="beige"
+                    intensity={0.1}
+                    penumbra={0.3}
+                    castShadow
+                  />
+
                   <primitive
+                    receiveShadow
+                    castShadow
                     ref={shirt.ref}
                     object={shirt.model.scene}
-                    position={shirt.loc}
-                    castShadow
-                    rotation={[0, Math.PI * 0.5, 0]}
+                    rotation={[0, Math.PI * 0, 0]}
                     scale={[0.4, 0.4, 0.4]}
+                    position={[shirt.loc[0], shirt.loc[1] + 0.1, shirt.loc[2]]}
                   />
-                );
-              })}
-            </group>
-          </MousePerspectiveRig>
-        </Scroll>
+                  <group
+                    position={[shirt.loc[0], shirt.loc[1] + 0.71, shirt.loc[2]]}
+                  >
+                    <mesh
+                      position={[0, 0.5, 0]}
+                      name="shirtbasetop"
+                      receiveShadow
+                      castShadow
+                    >
+                      <cylinderGeometry args={[0.16, 0.16, 1.5, 10]} />
+                      <meshStandardMaterial
+                        color={"silver"}
+                        metalness={1}
+                        roughness={0.7}
+                      />
+                    </mesh>
+                  </group>
+                  <mesh
+                    name="shirtlighttop"
+                    position={[
+                      shirt.loc[0],
+                      shirt.loc[1] + 0.455,
+                      shirt.loc[2],
+                    ]}
+                  >
+                    <cylinderGeometry args={[0.14, 0.14, 0.005, 32]} />
+                    <meshBasicMaterial color={"white"} />
+                  </mesh>
+                  <mesh
+                    name="shirtlightbottom"
+                    position={[shirt.loc[0], shirt.loc[1] + 0.02, shirt.loc[2]]}
+                  >
+                    <cylinderGeometry args={[0.14, 0.14, 0.005, 32]} />
+                    <meshBasicMaterial color={"white"} />
+                  </mesh>
 
-        <Scroll html>
-          <Box
-            flex={{ sm: 8, md: 3 }}
-            display="flex"
-            position="relative"
-            justifyContent="center"
-            alignItems="center"
-            flexDirection="column"
-            style={{ top: 0, left: 0 }}
-          >
-            <Page
-              pageNumber={1}
-              businessName={"CEM"}
-              businessDescription={
-                <>
-                  As a not-for-profit, non-denominational, Christian
-                  organisation CEM is involved in various aspects of Christian
-                  Education, including the delivery of school support services,
-                  developing curriculum, operating early learning centres and
-                  helping home schoolers. The organisation manages five distinct
-                  brands.
-                </>
-              }
-              jobDescription={
-                <ul>
-                  <li>
-                    Designed and developed multiple web applications and
-                    services using various technologies: Syncing Services, .NET,{" "}
-                    <TempLink
-                      loc="https://dannyfgithub.github.io/Timesheets-Demo-FrontEnd"
-                      disp="React.js"
+                  <mesh
+                    name="shirtglass"
+                    receiveShadow
+                    position={[shirt.loc[0], shirt.loc[1] + 0.21, shirt.loc[2]]}
+                  >
+                    <cylinderGeometry args={[0.141, 0.141, 0.5, 32]} />
+                    <meshStandardMaterial
+                      color={"white"}
+                      metalness={0}
+                      roughness={1}
+                      transparent
+                      opacity={0.15}
                     />
-                    , NodeJs, Typescript,{" "}
-                    <TempLink
-                      loc="https://apps.apple.com/au/app/cem-plain-conference-mode/id1490047083"
-                      disp="Swift"
+                  </mesh>
+                  <mesh
+                    name="shirtbasebottom"
+                    receiveShadow
+                    castShadow
+                    position={shirt.loc}
+                  >
+                    <cylinderGeometry args={[0.15, 0.15, 0.03, 32]} />
+                    <meshStandardMaterial
+                      color={"silver"}
+                      metalness={1}
+                      roughness={0.6}
                     />
-                    , Firebase, AWS Serverless, Canvas LMS (JS Development)
-                  </li>
-                  <li>Integrations with Intercom, Twilio (SMS) & BurstSMS</li>
-                  <li>Google Apps Script & Google APIs</li>
-                  <li>
-                    Implemented cloud-based solutions using AWS Serverless &
-                    Workato (Workato Automation Pro I & II, III)
-                  </li>
-                  <li>
-                    CICD with Bitbucket Pipelines for automated testing &
-                    deployment
-                  </li>
-                </ul>
-              }
-              jobRoles={
-                <>
-                  Roles:
-                  <div>Software Engineer</div>
-                  <div>IT Officer - Network and System Administrator</div>
-                </>
-              }
-            />
+                  </mesh>
+                </group>
+              );
+            })}
 
-            <Page
-              pageNumber={2}
-              businessName={"Apple Inc."}
-              businessDescription={
-                <>
-                  Apple Inc. is an American multinational corporation and
-                  technology company headquartered and incorporated in
-                  Cupertino, California, in Silicon Valley. It is best known for
-                  its consumer electronics, software, and services. Founded in
-                  1976 as Apple Computer Company by Steve Jobs, Steve Wozniak
-                  and Ronald Wayne, the company was incorporated by Jobs and
-                  Wozniak as Apple Computer, Inc. the following year. It was
-                  renamed Apple Inc. in 2007 as the company had expanded its
-                  focus from computers to consumer electronics. Apple is the
-                  largest technology company by revenue, with US$391.04 billion
-                  in 2024.
-                </>
-              }
-              jobRoles={
-                <>
-                  Apple Corporate Roles:
-                  <div>Apple Advisor Coach</div>
-                  <div>Mac+ Senior Advisor</div>
-                  <div>iOS Senior Advisor</div>
-                </>
-              }
-              jobDescription={<>Applecare Excellence Award Winner</>}
-            />
+            <mesh
+              ref={baseRef}
+              name="base"
+              receiveShadow
+              position={[0, -0.33, 0]}
+            >
+              <cylinderGeometry args={[1, 1, 0.04, 32]} />
+              <meshStandardMaterial
+                color={"silver"}
+                metalness={0.8}
+                roughness={0.2}
+              />
+            </mesh>
+          </group>
+        </MousePerspectiveRig>
+        <spotLight
+          target={baseRef.current}
+          position={[0, 0, 0]}
+          color="beige"
+          intensity={4}
+          penumbra={0}
+          castShadow
+        />
+        <ScrollPageCheck pageNum={pageNum} onPageChange={setPageNum} />
 
-            <Page
-              pageNumber={3}
-              businessName={"IP Technologies"}
-              businessDescription={
-                <>
-                  IP Technologies are a highly-specialized IP hardware and
-                  software supplier and IP technology integration company with
-                  experience in commercial solutions in small, medium and large
-                  businesses across Australia as well as in residential
-                  applications.
-                </>
-              }
-              jobDescription={
-                <ul>
-                  <li>
-                    Data Cabling & Network Rack Installations,{" "}
-                    <TempLink
-                      loc="https://dynalite.com/"
-                      disp="Phillips Dynalite"
-                    />{" "}
-                    Programming, Home Automation Light & Controller
-                    Installations, Boardroom Automation
-                  </li>
-                </ul>
-              }
-              jobRoles={
-                <>
-                  Roles:
-                  <div>IT Trade Assistant</div>
-                </>
-              }
-            />
-          </Box>
-        </Scroll>
+        <InformationGroup pageNum={pageNum} />
       </ScrollControls>
+      <Bounds fit clip observe margin={1.05}>
+        <group position={[-0.22, 0.15, -2.3]}>
+          <mesh visible={false}>
+            <boxGeometry args={[0.8, 0.85, 0.3]} />
+          </mesh>
+        </group>
+      </Bounds>
     </>
+  );
+};
+
+const ScrollPageCheck = function (props: {
+  pageNum: number;
+  onPageChange: (n: number) => void;
+}) {
+  const data = useScroll();
+
+  useFrame(() => {
+    const a = Math.floor(data.range(0, data.pages + 1) * 10);
+    if (a !== props.pageNum) props.onPageChange(a);
+  });
+
+  return null;
+};
+
+const InformationGroup = function (props) {
+  const pageNum = props.pageNum;
+  const scrollData = useScroll();
+
+  return (
+    <group
+      position={[-0.35, 0.14, -2]}
+      rotation={[Math.PI * 0, Math.PI * 0.2, 0]}
+    >
+      <group position={[0, 0, -0.006]}>
+        <mesh position={[0, 0, 0]}>
+          <boxGeometry args={[0.4, 0.5, 0.01]} />
+          <meshStandardMaterial color="#444" metalness={0} roughness={1} />
+        </mesh>
+      </group>
+      <Html
+        scale={0.03}
+        portal={{ current: scrollData.fixed }}
+        rotation={[0, 0, 0]}
+        position={[0, 0, 0]}
+        transform
+        as="div"
+        // occlude="blending"
+      >
+        <ThemeProvider theme={theme}>
+          <Box
+            width="540px"
+            height="680px"
+            style={
+              {
+                // border: "5px solid white",
+              }
+            }
+          >
+            {pageNum === 0 && (
+              <Page
+                pageNumber={1}
+                businessName={"CEM"}
+                businessDescription={
+                  <>
+                    As a not-for-profit, non-denominational, Christian
+                    organisation CEM is involved in various aspects of Christian
+                    Education, including the delivery of school support
+                    services, developing curriculum, operating early learning
+                    centres and helping home schoolers. The organisation manages
+                    five distinct brands.
+                  </>
+                }
+                jobDescription={
+                  <ul>
+                    <li>
+                      Designed and developed multiple web applications and
+                      services using various technologies: Syncing Services,
+                      .NET,{" "}
+                      <TempLink
+                        loc="https://dannyfgithub.github.io/Timesheets-Demo-FrontEnd"
+                        disp="React.js"
+                      />
+                      , NodeJs, Typescript,{" "}
+                      <TempLink
+                        loc="https://apps.apple.com/au/app/cem-plain-conference-mode/id1490047083"
+                        disp="Swift"
+                      />
+                      , Firebase, AWS Serverless, Canvas LMS (JS Development)
+                    </li>
+                    <li>Integrations with Intercom, Twilio (SMS) & BurstSMS</li>
+                    <li>Google Apps Script & Google APIs</li>
+                    <li>
+                      Implemented cloud-based solutions using AWS Serverless &
+                      Workato (Workato Automation Pro I & II, III)
+                    </li>
+                    <li>
+                      CICD with Bitbucket Pipelines for automated testing &
+                      deployment
+                    </li>
+                  </ul>
+                }
+                jobRoles={
+                  <>
+                    Roles:
+                    <div>Software Engineer</div>
+                    <div>IT Officer - Network and System Administrator</div>
+                  </>
+                }
+              />
+            )}
+            {pageNum === 1 && (
+              <Page
+                pageNumber={2}
+                businessName={"Apple Inc."}
+                businessDescription={
+                  <>
+                    Apple Inc. is an American multinational corporation and
+                    technology company headquartered and incorporated in
+                    Cupertino, California, in Silicon Valley. It is best known
+                    for its consumer electronics, software, and services.
+                    Founded in 1976 as Apple Computer Company by Steve Jobs,
+                    Steve Wozniak and Ronald Wayne, the company was incorporated
+                    by Jobs and Wozniak as Apple Computer, Inc. the following
+                    year. It was renamed Apple Inc. in 2007 as the company had
+                    expanded its focus from computers to consumer electronics.
+                    Apple is the largest technology company by revenue, with
+                    US$391.04 billion in 2024.
+                  </>
+                }
+                jobRoles={
+                  <>
+                    Apple Corporate Roles:
+                    <div>Apple Advisor Coach</div>
+                    <div>Mac+ Senior Advisor</div>
+                    <div>iOS Senior Advisor</div>
+                  </>
+                }
+                jobDescription={<>Applecare Excellence Award Winner</>}
+              />
+            )}
+            {pageNum === 2 && (
+              <Page
+                pageNumber={3}
+                businessName={"IP Technologies"}
+                businessDescription={
+                  <>
+                    IP Technologies are a highly-specialized IP hardware and
+                    software supplier and IP technology integration company with
+                    experience in commercial solutions in small, medium and
+                    large businesses across Australia as well as in residential
+                    applications.
+                  </>
+                }
+                jobDescription={
+                  <ul>
+                    <li>
+                      Data Cabling & Network Rack Installations,{" "}
+                      <TempLink
+                        loc="https://dynalite.com/"
+                        disp="Phillips Dynalite"
+                      />{" "}
+                      Programming, Home Automation Light & Controller
+                      Installations, Boardroom Automation
+                    </li>
+                  </ul>
+                }
+                jobRoles={
+                  <>
+                    Roles:
+                    <div>IT Trade Assistant</div>
+                  </>
+                }
+              />
+            )}
+          </Box>
+        </ThemeProvider>
+      </Html>
+    </group>
   );
 };
 
@@ -409,8 +488,6 @@ const WorkExperienceDivWrapper = styled.div`
 `;
 
 export const WorkExperienceCanvas = () => {
-  const { mode } = useColorScheme();
-
   return (
     <WorkExperienceDivWrapper>
       <Canvas
@@ -421,24 +498,17 @@ export const WorkExperienceCanvas = () => {
         }}
         dpr={window.devicePixelRatio}
         camera={{
-          position: [0, 0, 0],
-          fov: 25,
+          position: [0, 0.3, 0],
+          fov: 35,
         }}
         gl={{ antialias: false }}
+        shadows
       >
-        <ambientLight intensity={0.5 * Math.PI} />
-        <Environment files="https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/potsdamer_platz_1k.hdr" />
+        <fog attach="fog" near={1} far={5} args={["black"]} />
+        <ambientLight intensity={0.2 * Math.PI} />
         {/* <Stats /> */}
-        {/* <directionalLight
-          position={[-1.3, 6.0, 4.4]}
-          castShadow
-          intensity={Math.PI * (mode === "dark" ? 0.45 : 2)}
-        /> */}
-        {/* <ambientLight intensity={1} /> */}
         <Suspense fallback={null}>
-          <Center>
-            <Scene />
-          </Center>
+          <Scene />
         </Suspense>
       </Canvas>
 
