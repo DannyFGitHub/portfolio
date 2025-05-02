@@ -64,70 +64,72 @@ function BookMenuItem(
     }
   }, [props.isActive]);
 
-  useFrame(() => {
+  useFrame((state, delta) => {
+    const lerpFactor = delta * 9; //0.025;
+
     if (props.isActive) {
       groupRef.current.position.x = MathUtils.lerp(
         groupRef.current.position.x,
         BookOnTable.position[0],
-        0.025
+        lerpFactor
       );
       groupRef.current.position.y = MathUtils.lerp(
         groupRef.current.position.y,
         BookOnTable.position[1],
-        0.025
+        lerpFactor
       );
       groupRef.current.position.z = MathUtils.lerp(
         groupRef.current.position.z,
         BookOnTable.position[2],
-        0.025
+        lerpFactor
       );
 
       groupRef.current.rotation.x = MathUtils.lerp(
         groupRef.current.rotation.x,
         BookOnTable.rotation[0],
-        0.025
+        lerpFactor
       );
       groupRef.current.rotation.y = MathUtils.lerp(
         groupRef.current.rotation.y,
         BookOnTable.rotation[1],
-        0.025
+        lerpFactor
       );
       groupRef.current.rotation.z = MathUtils.lerp(
         groupRef.current.rotation.z,
         BookOnTable.rotation[2],
-        0.025
+        lerpFactor
       );
     } else {
       groupRef.current.position.x = MathUtils.lerp(
         groupRef.current.position.x,
         props.position[0],
-        0.025
+        lerpFactor
       );
       groupRef.current.position.y = MathUtils.lerp(
         groupRef.current.position.y,
         props.position[1],
-        0.025
+        lerpFactor
       );
       groupRef.current.position.z = MathUtils.lerp(
         groupRef.current.position.z,
         props.position[2],
-        0.025
+        lerpFactor
       );
 
       groupRef.current.rotation.x = MathUtils.lerp(
         groupRef.current.rotation.x,
         props.rotation[0],
-        0.025
+        lerpFactor
       );
       groupRef.current.rotation.y = MathUtils.lerp(
         groupRef.current.rotation.y,
         props.rotation[1],
-        0.025
+        lerpFactor
       );
       groupRef.current.rotation.z = MathUtils.lerp(
         groupRef.current.rotation.z,
         props.rotation[2],
-        0.025
+        lerpFactor
       );
     }
 
@@ -135,80 +137,80 @@ function BookMenuItem(
       bookRef.current.position.x = MathUtils.lerp(
         bookRef.current.position.x,
         0.4,
-        0.025
+        lerpFactor
       );
 
       bookTextRef.current.scale.x = MathUtils.lerp(
         bookTextRef.current.scale.x,
         0.35,
-        0.025
+        lerpFactor
       );
       bookTextRef.current.scale.y = MathUtils.lerp(
         bookTextRef.current.scale.y,
         0.35,
-        0.025
+        lerpFactor
       );
 
       bookTextRef.current.position.x = MathUtils.lerp(
         bookTextRef.current.position.x,
         0.5,
-        0.025
+        lerpFactor
       );
       bookTextRef.current.position.y = MathUtils.lerp(
         bookTextRef.current.position.y,
         0.2,
-        0.025
+        lerpFactor
       );
       bookTextRef.current.position.z = MathUtils.lerp(
         bookTextRef.current.position.z,
         -0.13,
-        0.025
+        lerpFactor
       );
 
       bookTextRef.current.rotation.x = MathUtils.lerp(
         bookTextRef.current.rotation.x,
         0,
-        0.025
+        lerpFactor
       );
     } else {
       bookRef.current.position.x = MathUtils.lerp(
         bookRef.current.position.x,
         0.8,
-        0.025
+        lerpFactor
       );
 
       bookTextRef.current.scale.x = MathUtils.lerp(
         bookTextRef.current.scale.x,
         1,
-        0.025
+        lerpFactor
       );
       bookTextRef.current.scale.y = MathUtils.lerp(
         bookTextRef.current.scale.y,
         1,
-        0.025
+        lerpFactor
       );
 
       bookTextRef.current.position.x = MathUtils.lerp(
         bookTextRef.current.position.x,
         -0.05,
-        0.025
+        lerpFactor
       );
       bookTextRef.current.position.y = MathUtils.lerp(
         bookTextRef.current.position.y,
         2,
-        0.025
+        lerpFactor
       );
 
       bookTextRef.current.position.z = MathUtils.lerp(
         bookTextRef.current.position.z,
         -1,
-        0.025
+        lerpFactor
       );
 
       bookTextRef.current.rotation.x = MathUtils.lerp(
         bookTextRef.current.rotation.x,
         Math.PI * 0.2,
-        0.025
+        lerpFactor
       );
     }
   });

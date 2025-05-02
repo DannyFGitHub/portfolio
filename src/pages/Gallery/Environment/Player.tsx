@@ -18,7 +18,7 @@ export function Player() {
   );
 
   const [, get] = useKeyboardControls();
-  useFrame((state) => {
+  useFrame((state, delta) => {
     const { forward, backward, left, right, jump } = get();
     // const velocity = ref.current!.linvel();
 

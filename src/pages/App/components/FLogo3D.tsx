@@ -21,7 +21,7 @@ export function FLogo3D(props) {
     const offset = Math.sin(state.clock.getElapsedTime() * 1) * 0.02;
     group.current.position.y = props.position[1] + offset + 0.04;
 
-    group.current.rotation.y += 0.005;
+    group.current.rotation.y += 0.8 * delta;
   });
 
   return (

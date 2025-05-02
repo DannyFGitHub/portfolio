@@ -41,7 +41,7 @@ function Desk(props: ThreeElements["group"] & { disableScroll?: boolean }) {
       rotation={[Math.PI * 0.09, 0, 0]}
     >
       <Bookshelf name="desk" position={[0, 0, 0]} />
-      <Bounds fit clip observe margin={1.5}>
+      <Bounds fit clip observe margin={1.2}>
         <BooksMenu
           name="booksMenu"
           onZoomInOnBook={() => {

@@ -29,28 +29,30 @@ export function OpenBook(
 
   const bookHalfRef = useRef<THREE.Mesh>(null!);
 
-  useFrame(() => {
+  useFrame((state, delta) => {
+    const lerpFactor = delta * 6; //0.025;
+
     if (props.closed) {
       bookHalfRef.current.position.y = THREE.MathUtils.lerp(
         bookHalfRef.current.position.y,
         0.015,
-        0.025
+        lerpFactor
       );
       bookHalfRef.current.rotation.z = THREE.MathUtils.lerp(
         bookHalfRef.current.rotation.z,
         -Math.PI,
-        0.025
+        lerpFactor
       );
     } else {
       bookHalfRef.current.position.y = THREE.MathUtils.lerp(
         bookHalfRef.current.position.y,
         0,
-        0.025
+        lerpFactor
       );
       bookHalfRef.current.rotation.z = THREE.MathUtils.lerp(
         bookHalfRef.current.rotation.z,
         0,
-        0.025
+        lerpFactor
       );
     }
   });

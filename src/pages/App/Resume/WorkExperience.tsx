@@ -54,7 +54,7 @@ export function MousePerspectiveRig(props: {
     if (props?.disableScroll !== true) {
       // Interpolate between the current offset and the target offset
       setScrollOffset((prevOffset) =>
-        MathUtils.lerp(prevOffset, targetOffset, 0.06)
+        MathUtils.lerp(prevOffset, targetOffset, delta * 5)
       );
 
       // Update rotation based on the smoothed scroll position
@@ -187,6 +187,8 @@ const Scene = () => {
   );
 
   useFrame((state, delta) => {
+    const rotationSpeed = 0.4;
+
     const offset1 = Math.sin(state.clock.getElapsedTime() * 1) * 0.018;
     cemshirtRef.current.position.y = offset1 - 0.2;
 
@@ -196,9 +198,9 @@ const Scene = () => {
     const offset3 = Math.sin(state.clock.getElapsedTime() * 0.9) * 0.018;
     iptechshirtRef.current.position.y = offset3 - 0.2;
 
-    cemshirtRef.current.rotation.y += 0.005;
-    appleshirtRef.current.rotation.y += 0.005;
-    iptechshirtRef.current.rotation.y += 0.005;
+    cemshirtRef.current.rotation.y += delta * rotationSpeed;
+    appleshirtRef.current.rotation.y += delta * rotationSpeed;
+    iptechshirtRef.current.rotation.y += delta * rotationSpeed;
   });
 
   useEffect(() => {
@@ -355,7 +357,7 @@ const InformationGroup = function (props) {
     >
       <group
         scale={[0.15, 0.15, 0.15]}
-        position={[0, 0.26, 0.1]}
+        position={[0.02, 0.26, 0.1]}
         rotation={[0, -Math.PI * 0.2, 0]}
       >
         <Text3D
