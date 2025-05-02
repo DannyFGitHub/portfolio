@@ -20,21 +20,51 @@ import styled from "styled-components";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
-import { Group, Mesh } from "three";
+import { Group, MathUtils, Mesh } from "three";
 import { ThemeProvider, useColorScheme } from "@mui/material";
 import { theme } from "../../../themes/MainTheme";
+import { useWindowSize } from "../../../hooks/useWindowsSize";
 
-export function MousePerspectiveRig(props) {
+export function MousePerspectiveRig(props: {
+  pageNum: number;
+  onPageChange: (n: number) => void;
+}) {
   const ref = useRef<Group>(null!);
-  let scroll = useScroll();
+  const scroll = useScroll();
+
+  const [targetOffset, setTargetOffset] = useState(0);
+  const [scrollOffset, setScrollOffset] = useState(0);
+
+  // Function to snap to the closest "page" when scroll changes
+  const snapScroll = () => {
+    let a = Math.floor(scroll.offset * scroll.pages + 1) - 1;
+    // In case it reaches max number, set it to max pages number
+    if (a >= scroll.pages) {
+      a = scroll.pages - 1;
+    }
+    if (a !== props.pageNum) props.onPageChange(a);
+    const snapPoint = a / scroll.pages + a / (scroll.pages * 2);
+    setTargetOffset(snapPoint);
+  };
+
   useFrame((state, delta) => {
     if (props?.disableScroll !== true) {
+      // Interpolate between the current offset and the target offset
+      setScrollOffset((prevOffset) =>
+        MathUtils.lerp(prevOffset, targetOffset, 0.06)
+      );
+
+      // Update rotation based on the smoothed scroll position
       ref.current.rotation.y =
-        -scroll.offset * (Math.PI * 1.33) + Math.PI * 1.35; // Rotate contents
+        -scrollOffset * (Math.PI * 1.33) + Math.PI * 1.35;
     }
+
+    // Call snap function to update the target scroll position
+    snapScroll();
 
     state.events.update(); // Raycasts every frame rather than on pointer-move
   });
+
   return <group ref={ref} {...props} />;
 }
 
@@ -115,6 +145,9 @@ const Scene = () => {
   const iptechshirtRef = useRef();
   const baseRef = useRef();
 
+  const scrollRef = useRef();
+  const scrollPosRef = useRef();
+
   const { scene, viewport } = useThree();
   const { mode, setMode } = useColorScheme();
 
@@ -164,10 +197,12 @@ const Scene = () => {
 
   return (
     <>
-      <ScrollControls pages={3} damping={0.25} horizontal>
+      <ScrollControls ref={scrollRef} pages={3} damping={0.25} horizontal>
         <MousePerspectiveRig
           position={[0, 0.2, -3]}
           // rotation={[Math.PI * 0.05, 0, 0]}
+          pageNum={pageNum}
+          onPageChange={setPageNum}
         >
           <group>
             {shirtWithLoc.map((shirt, index) => {
@@ -285,7 +320,6 @@ const Scene = () => {
           penumbra={0}
           castShadow
         />
-        <ScrollPageCheck pageNum={pageNum} onPageChange={setPageNum} />
 
         <InformationGroup pageNum={pageNum} />
       </ScrollControls>
@@ -300,33 +334,40 @@ const Scene = () => {
   );
 };
 
-const ScrollPageCheck = function (props: {
-  pageNum: number;
-  onPageChange: (n: number) => void;
-}) {
-  const data = useScroll();
-
-  useFrame(() => {
-    const a = Math.floor(data.range(0, data.pages + 1) * 10);
-    if (a !== props.pageNum) props.onPageChange(a);
-  });
-
-  return null;
-};
-
 const InformationGroup = function (props) {
   const pageNum = props.pageNum;
   const scrollData = useScroll();
 
   return (
     <group
-      position={[-0.35, 0.14, -2]}
+      position={[-0.35, 0.16, -2]}
       rotation={[Math.PI * 0, Math.PI * 0.2, 0]}
     >
       <group position={[0, 0, -0.006]}>
+        <mesh
+          position={[0, 0.265, 0]}
+          rotation={[Math.PI * 0.5, 0, Math.PI * 0.5]}
+        >
+          <cylinderGeometry args={[0.02, 0.02, 0.41, 32]} />
+          <meshStandardMaterial color="#444" metalness={0} roughness={1} />
+        </mesh>
         <mesh position={[0, 0, 0]}>
           <boxGeometry args={[0.4, 0.5, 0.01]} />
-          <meshStandardMaterial color="#444" metalness={0} roughness={1} />
+          <meshStandardMaterial color="#555" metalness={0} roughness={1} />
+        </mesh>
+        <mesh
+          position={[0, 0.249, 0.003]}
+          rotation={[Math.PI * 0.5, 0, Math.PI * 0.5]}
+        >
+          <cylinderGeometry args={[0.005, 0.005, 0.405, 32]} />
+          <meshBasicMaterial color="#dff" />
+        </mesh>
+        <mesh
+          position={[0, -0.246, 0.003]}
+          rotation={[Math.PI * 0.5, 0, Math.PI * 0.5]}
+        >
+          <cylinderGeometry args={[0.005, 0.005, 0.399, 32]} />
+          <meshBasicMaterial color="#444" />
         </mesh>
       </group>
       <Html
@@ -488,6 +529,8 @@ const WorkExperienceDivWrapper = styled.div`
 `;
 
 export const WorkExperienceCanvas = () => {
+  const { width, height } = useWindowSize();
+
   return (
     <WorkExperienceDivWrapper>
       <Canvas
@@ -504,7 +547,7 @@ export const WorkExperienceCanvas = () => {
         gl={{ antialias: false }}
         shadows
       >
-        <fog attach="fog" near={1} far={5} args={["black"]} />
+        {width > 765 && <fog attach="fog" near={1} far={5} args={["black"]} />}
         <ambientLight intensity={0.2 * Math.PI} />
         {/* <Stats /> */}
         <Suspense fallback={null}>
