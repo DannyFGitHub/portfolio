@@ -11,6 +11,7 @@ import {
   Stats,
   Html,
   Bounds,
+  Text3D,
 } from "@react-three/drei";
 import { Color } from "three/webgpu";
 import cemshirtUrl from "../../../assets/models/cemshirt.glb";
@@ -19,6 +20,8 @@ import iptechshirtUrl from "../../../assets/models/iptechshirt.glb";
 import styled from "styled-components";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import MegrimFont from "../../../assets/fonts/Megrim_Medium-typeface.ttf";
+import BrunoFont from "../../../assets/fonts/Bruno Ace SC_Regular-typeface.ttf";
 
 import { Group, MathUtils, Mesh } from "three";
 import { ThemeProvider, useColorScheme } from "@mui/material";
@@ -76,8 +79,14 @@ function Page({
   jobRoles,
 }) {
   return (
-    <Box p={1}>
-      <Box p={{ sm: 1, md: 2 }}>
+    <Box
+      height="100%"
+      width="100%"
+      display="flex"
+      justifyContent="center"
+      alignItems="start"
+    >
+      <Box p={1}>
         <Box p={1}>
           <Typography fontFamily="shrik" variant="h2">
             {businessName}
@@ -85,7 +94,7 @@ function Page({
         </Box>
 
         <Box
-          p={1}
+          p={2}
           display="flex"
           justifyContent="center"
           alignItems="center"
@@ -100,11 +109,12 @@ function Page({
           alignItems="center"
           alignContent="center"
           flexDirection="column"
+          p={1}
         >
-          <hr style={{ width: "50%" }} />
+          <hr style={{ width: "60%", border: "1px solid orange" }} />
         </Box>
         <Box
-          p={2}
+          p={1}
           m={1}
           display="flex"
           justifyContent="center"
@@ -133,7 +143,7 @@ function Page({
 
 function TempLink({ loc, disp }: { loc: string; disp: string }) {
   return (
-    <a style={{ color: "purple" }} href={loc}>
+    <a style={{ color: "orange" }} href={loc}>
       {disp}
     </a>
   );
@@ -343,6 +353,46 @@ const InformationGroup = function (props) {
       position={[-0.35, 0.16, -2]}
       rotation={[Math.PI * 0, Math.PI * 0.2, 0]}
     >
+      <group
+        scale={[0.15, 0.15, 0.15]}
+        position={[0, 0.26, 0.1]}
+        rotation={[0, -Math.PI * 0.2, 0]}
+      >
+        <Text3D
+          position={[0, 0.3, 0.01]}
+          size={0.1}
+          height={0.05}
+          curveSegments={12}
+          bevelEnabled
+          bevelThickness={0.01}
+          bevelSize={0.005}
+          bevelOffset={0}
+          bevelSegments={5}
+          rotation={[0, 0, 0]}
+          font={BrunoFont}
+        >
+          Danny's
+          <meshStandardMaterial color="orange" />
+        </Text3D>
+
+        <Text3D
+          position={[0.2, 0, -0.04]}
+          size={0.25}
+          height={0.1}
+          curveSegments={12}
+          bevelEnabled
+          bevelThickness={0.01}
+          bevelSize={0.02}
+          bevelOffset={0}
+          bevelSegments={5}
+          rotation={[0, 0, 0]}
+          font={MegrimFont}
+        >
+          Work Experience
+          <meshStandardMaterial color="white" />
+        </Text3D>
+      </group>
+
       <group position={[0, 0, -0.006]}>
         <mesh
           position={[0, 0.265, 0]}
@@ -353,7 +403,7 @@ const InformationGroup = function (props) {
         </mesh>
         <mesh position={[0, 0, 0]}>
           <boxGeometry args={[0.4, 0.5, 0.01]} />
-          <meshStandardMaterial color="#555" metalness={0} roughness={1} />
+          <meshBasicMaterial color="#444" />
         </mesh>
         <mesh
           position={[0, 0.249, 0.003]}
@@ -367,7 +417,7 @@ const InformationGroup = function (props) {
           rotation={[Math.PI * 0.5, 0, Math.PI * 0.5]}
         >
           <cylinderGeometry args={[0.005, 0.005, 0.399, 32]} />
-          <meshBasicMaterial color="#444" />
+          <meshBasicMaterial color="#555" />
         </mesh>
       </group>
       <Html
