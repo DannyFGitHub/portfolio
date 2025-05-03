@@ -54,7 +54,7 @@ export function MousePerspectiveRig(props: {
     if (props?.disableScroll !== true) {
       // Interpolate between the current offset and the target offset
       setScrollOffset((prevOffset) =>
-        MathUtils.lerp(prevOffset, targetOffset, delta * 5)
+        MathUtils.lerp(prevOffset, targetOffset, delta * 4)
       );
 
       // Update rotation based on the smoothed scroll position
@@ -599,8 +599,8 @@ export const WorkExperienceCanvas = () => {
         gl={{ antialias: false }}
         shadows
       >
-        {width > 765 && <fog attach="fog" near={1} far={5} args={["black"]} />}
-        <ambientLight intensity={0.2 * Math.PI} />
+        {width > 765 && <fog attach="fog" near={2} far={4} args={["black"]} />}
+        <ambientLight intensity={0.3 * Math.PI} />
         {/* <Stats /> */}
         <Suspense fallback={null}>
           <Scene />

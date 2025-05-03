@@ -75,7 +75,7 @@ export function OpenBook(
             color={props.color}
             transparent
             opacity={1}
-            side={2}
+            side={THREE.DoubleSide}
             roughness={1}
             metalness={0}
           />
@@ -96,7 +96,7 @@ export function OpenBook(
                 color={props.color}
                 transparent
                 opacity={1}
-                side={2}
+                side={THREE.DoubleSide}
                 roughness={1}
                 metalness={0}
               />

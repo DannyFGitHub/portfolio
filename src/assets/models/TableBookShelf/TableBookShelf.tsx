@@ -104,7 +104,7 @@ export function TableBookShelf(props: JSX.IntrinsicElements["group"]) {
               color={materials.Cup.color}
               metalness={0.3}
               roughness={0.2}
-              side={2}
+              side={THREE.DoubleSide}
             />
 
             <mesh
