@@ -79,7 +79,8 @@ function Desk(props: ThreeElements["group"] & { disableScroll?: boolean }) {
               data: {
                 line1: "Danny",
                 line2: "Projects",
-                navPath: "",
+                navPath:
+                  "https://github.com/DannyFGitHub?tab=repositories&q=&type=source&language=&sort=",
               },
             },
             {
@@ -87,7 +88,7 @@ function Desk(props: ThreeElements["group"] & { disableScroll?: boolean }) {
               data: {
                 line1: "Danny",
                 line2: "Theology",
-                navPath: "",
+                navPath: "https://dannyfgithub.github.io/bubbleverse/",
               },
             },
             {
@@ -95,7 +96,7 @@ function Desk(props: ThreeElements["group"] & { disableScroll?: boolean }) {
               data: {
                 line1: "Danny",
                 line2: "Music",
-                navPath: "",
+                navPath: "https://soundcloud.com/melobytes",
               },
             },
             {
@@ -119,7 +120,8 @@ function Desk(props: ThreeElements["group"] & { disableScroll?: boolean }) {
               data: {
                 line1: "Danny",
                 line2: "Gallery",
-                navPath: "/gallery",
+                navPath:
+                  "https://dannyfgithub.github.io/Dangar-Island-VR-Photography/", // "/gallery",
               },
             },
           ]}
