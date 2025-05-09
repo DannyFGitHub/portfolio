@@ -38,6 +38,9 @@ export function MousePerspectiveRig(props: {
   const [targetOffset, setTargetOffset] = useState(0);
   const [scrollOffset, setScrollOffset] = useState(0);
 
+  const [mouseDown, setMouseDown] = useState<boolean>(false);
+  const [mouseXMovement, setMouseXMovement] = useState(0);
+
   // Function to snap to the closest "page" when scroll changes
   const snapScroll = () => {
     let a = Math.floor(scroll.offset * scroll.pages + 1) - 1;
@@ -60,6 +63,11 @@ export function MousePerspectiveRig(props: {
       // Update rotation based on the smoothed scroll position
       ref.current.rotation.y =
         -scrollOffset * (Math.PI * 1.33) + Math.PI * 1.35;
+
+      // TODO: Try to use move with mouse with snap points, animating to snap point
+      // if (mouseXMovement !== 0) {
+      //   ref.current.rotation.y = ref.current.rotation.y + mouseXMovement / 200;
+      // }
     }
 
     // Call snap function to update the target scroll position
@@ -68,7 +76,27 @@ export function MousePerspectiveRig(props: {
     state.events.update(); // Raycasts every frame rather than on pointer-move
   });
 
-  return <group ref={ref} {...props} />;
+  return (
+    <group
+      ref={ref}
+      onPointerDown={() => {
+        setMouseDown(true);
+      }}
+      onPointerUp={() => {
+        setMouseDown(false);
+      }}
+      onPointerMove={(e) => {
+        if (mouseDown) {
+          setMouseXMovement(e.movementX);
+        } else {
+          if (mouseXMovement !== 0) {
+            setMouseXMovement(0);
+          }
+        }
+      }}
+      {...props}
+    />
+  );
 }
 
 function Page({
