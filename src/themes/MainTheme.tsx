@@ -17,7 +17,7 @@ const STATIC_COLOR = "rgb(43, 31, 31)";
 const bkgGradient = `radial-gradient(60% 105% at 0% 0%,rgb(26, 76, 116) 10%, ${STATIC_COLOR})`;
 
 const mainTheme = createTheme({
-  colorSchemes: { light: true, dark: true },
+  colorSchemes: { light: false, dark: true },
   cssVariables: {
     colorSchemeSelector: "class",
   },
